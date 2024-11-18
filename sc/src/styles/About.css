@@ -1,15 +1,19 @@
-#root {
-  max-width: 1280px;
-}
-
-.abt-mn1{
+.abt-mn-main {
+  height: auto;
   display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 10%;
 }
 
 .abt-mn{
   text-align:left;
   border: 1.5px solid rgb(208, 199, 199);
   border-radius: 10px;
+  display: block;
   padding:30px;
-  margin:auto;
+  margin-left: 10%;
+  margin-right: 10%;
+  width: 70%;
+  text-align: justify;
 }
