@@ -2,3 +2,15 @@
   margin: 0 auto;
   text-align: center;
 }
+
+.home-main{
+  display: flex;
+}
+
+.left-main{
+  max-width: 220px;
+}
+
+.left-main > div{
+  padding: 20px;
+}

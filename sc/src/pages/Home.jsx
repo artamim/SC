@@ -2,12 +2,19 @@ import { useState } from 'react'
 import '../styles/Home.css'
 
 function Home() {
-  const [count, setCount] = useState(0)
 
   return (
-    <>
-      <div>IUASIDNKD</div>
-    </>
+    <div classname="home-main">
+      {/*Left Nav*/}
+      <div className='left-main'>
+        <div>Dahsboard</div>
+        <div>Dahsboard</div>
+        <div>Dahsboard</div>
+      </div>
+
+      {/*Right Body*/}
+      <div></div>
+    </div>
   )
 }
 
