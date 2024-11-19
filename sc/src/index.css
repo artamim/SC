@@ -1,14 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap');
+
 body{
   padding: 0%;
   margin: 0%;
-  background-color: #242424;
-  color: rgba(255, 255, 255, 0.87);
 }
 
 #root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: "Nunito Sans", Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
-  font-weight: 400;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+  font-variation-settings:
+    "wdth" 100,
+    "YTLC" 500;
 
   color-scheme: light dark;
 
@@ -22,7 +27,7 @@ body{
 
 a {
   font-weight: 500;
-  color: #d9dadf;
+  color: #ffffff;
   text-decoration: inherit;
 }
 a:hover {

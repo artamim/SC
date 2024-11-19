@@ -3,12 +3,13 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-top: 10%;
+  padding-top: 5%;
+  margin-bottom: 50px;
 }
 
 .abt-mn{
   text-align:left;
-  border: 1.5px solid rgb(208, 199, 199);
+  border: 1px solid #A9B5B8;
   border-radius: 10px;
   display: block;
   padding:30px;
@@ -16,4 +17,5 @@
   margin-right: 10%;
   width: 70%;
   text-align: justify;
+  background-color: white;
 }

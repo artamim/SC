@@ -10,6 +10,7 @@ export default function RootLayout() {
                 <ul className="right-menu">
                     <li><NavLink to="/">Home</NavLink></li>
                     <li><NavLink to="about">About</NavLink></li>
+                    <li><NavLink to="signout">SignOut</NavLink></li>
                 </ul>
             </nav>
             <main>

@@ -2,7 +2,7 @@ nav{
     position: sticky;
     top: 0;
     background: rgb(7,149,166);
-    background: linear-gradient(90deg, rgba(7,149,166,1) 0%, rgba(74,199,236,1) 83%);
+    background: linear-gradient(90deg, rgba(7,149,166,1) 0%, rgba(49,208,255,1) 100%);
     z-index: 1000;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     display: flex;
