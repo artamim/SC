@@ -1,20 +1,22 @@
 import React from 'react';
 import { NavLink, Outlet} from 'react-router-dom';
-import '../styles/RootLayout.css';
+import '../styles/HeaderLayout.css';
 
-export default function RootLayout() {
+export default function HeaderLayout() {
     return (
         <header>
             <nav>
                 <div></div>
                 <ul className="right-menu">
-                    <li><NavLink to="/">Home</NavLink></li>
+                    <li><NavLink to="/">Dashboard</NavLink></li>
                     <li><NavLink to="about">About</NavLink></li>
                     <li><NavLink to="signout">SignOut</NavLink></li>
                 </ul>
             </nav>
             <main>
-                <Outlet />
+                <div className="main-body">
+                    <Outlet />
+                </div>
             </main>
         </header>
     );

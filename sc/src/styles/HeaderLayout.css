@@ -1,0 +1,30 @@
+nav{
+  position: sticky;
+  top: 0;
+  background: rgb(7,149,166);
+  background: linear-gradient(90deg, rgba(7,149,166,1) 0%, rgba(49,208,255,1) 100%);
+  z-index: 1000;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  padding: 30px;
+  font-weight: bold;
+}
+  
+.right-menu{
+  margin: 0%;
+  display: flex;
+  list-style-type: none;
+}
+
+.right-menu > li{
+  margin-right: 20px;
+}
+
+.right-menu > li > a{
+  font-weight: bolder;
+  user-select: none;
+  font-size: 20px;
+}
+/*https://goodpalette.io/15b2d1-6bf227-a9b5b8*/
+
