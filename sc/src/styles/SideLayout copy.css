@@ -1,46 +1,77 @@
-nav{
-  position: sticky;
-  top: 0;
-  background: rgb(7,149,166);
-  background: linear-gradient(90deg, rgba(7,149,166,1) 0%, rgba(49,208,255,1) 100%);
-  z-index: 1000;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  display: flex;
-  justify-content: space-between;
-  padding: 30px;
-  font-weight: bold;
-}
-  
-.right-menu{
-  margin: 0%;
-  display: flex;
-  list-style-type: none;
+.headerbody{
+  height:30px;
 }
 
-.right-menu > li{
-  margin-right: 20px;
-}
-
-.right-menu > li > a{
-  font-weight: bolder;
-  user-select: none;
-  font-size: 20px;
+.contentbody{
+  display: flex;
+  justify-content: space-around;
 }
 
 .side-menu{
   position: sticky;
-  left: 1%;
-  top: 15%;
+  left: 0%;
+  margin:auto;
+  margin-top:0px;
   width: 15%;
-  height: 80vh;
+  height: 90vh;
   background-color: #83D8F9;
   text-align: left;
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
+  overflow-y: auto;
 }
 
-.main-body{
-  
+.side-menu::-webkit-scrollbar {
+  display: none;
+}
+
+.side-menu>a:hover{
+  color: white;
+  background-color: #15B2D1;
+  padding-left: 35px;
+  transition: padding-left 0.25s;
+}
+
+.mains{
+  display: block;
+  padding-left: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.mains > img{
+  width:22px;
+  margin-right:10px;
+}
+
+.channel{
+  color: #656E6F;
+  padding-top: 10px;
+  padding-bottom: 3px;
+  padding-left: 20px;
+  font-size: 13px;
+}
+
+.route{
+  padding-top: 7.5px;
+  padding-bottom: 7.5px;
+  padding-left: 20px;
+  display: block;
+}
+
+.devider{
+  height: 1px;
+  background-color: #A9B5B8;
+  margin-top: 3px;
+}
+
+.contentbody{
+  background-color: black;
+  width: 82%;
+  height: 100vh;
+  overflow-y: auto;
 }
 /*https://goodpalette.io/15b2d1-6bf227-a9b5b8*/
 

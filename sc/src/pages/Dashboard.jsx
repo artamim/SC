@@ -5,7 +5,6 @@ function Dashboard() {
 
   return (
     <div>
-      <div>My Name is Tamim</div>
     </div>
     
   )
