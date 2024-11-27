@@ -1,0 +1,53 @@
+CREATE TABLE users (
+    xuser VARCHAR(9) PRIMARY KEY,       -- User ID with pattern USR-00001
+    xusername VARCHAR(100) NOT NULL,   -- User's full name
+    xjoindate DATE NOT NULL,           -- Join date
+    xlanguage VARCHAR(20) NOT NULL,    -- Language preference
+    zactive INT NOT NULL,              -- Active status (1 for active, 0 for inactive)
+    xemail VARCHAR(100) NOT NULL,      -- User's email
+    password VARCHAR(8) NOT NULL,      -- User's password
+    xtype VARCHAR(20) NOT NULL         -- User type ('User' or 'Admin')
+);
+
+INSERT INTO users (xuser, xusername, xjoindate, xlanguage, zactive, xemail, password, xtype) VALUES 
+('USR-00001', 'Arifur Rahman Tamim', '2018-10-12', 'Bangla', 1, 'arifur.rahman.tamim@gmail.com', '12121212', 'Admin'),
+('USR-00002', 'John Smith', '2019-02-15', 'English', 1, 'john.smith@example.com', 'abc12345', 'User'),
+('USR-00003', 'Emily Johnson', '2020-06-30', 'Bangla', 1, 'emily.johnson@example.com', 'xyz67890', 'Admin'),
+('USR-00004', 'Michael Brown', '2021-11-01', 'Arabic', 0, 'michael.brown@example.com', 'lmn45678', 'User'),
+('USR-00005', 'Jessica Williams', '2023-04-18', 'English', 1, 'jessica.williams@example.com', 'qwe12345', 'User'),
+('USR-00006', 'David Jones', '2019-09-25', 'Bangla', 0, 'david.jones@example.com', 'asd45678', 'Admin'),
+('USR-00007', 'Sarah Garcia', '2022-01-12', 'Arabic', 1, 'sarah.garcia@example.com', 'zxc78901', 'User'),
+('USR-00008', 'Daniel Miller', '2020-03-07', 'English', 1, 'daniel.miller@example.com', 'poi09876', 'User'),
+('USR-00009', 'Laura Martinez', '2024-08-20', 'Bangla', 0, 'laura.martinez@example.com', 'lkj56789', 'User'),
+('USR-00010', 'James Davis', '2019-12-10', 'Arabic', 1, 'james.davis@example.com', 'mnb43210', 'User'),
+('USR-00011', 'Olivia Anderson', '2022-07-15', 'English', 0, 'olivia.anderson@example.com', 'vcx67890', 'User'),
+('USR-00012', 'Sophia Taylor', '2021-05-28', 'Arabic', 0, 'sophia.taylor@example.com', 'tyu34567', 'User'),
+('USR-00013', 'Matthew Thomas', '2024-01-01', 'English', 1, 'matthew.thomas@example.com', 'opq87654', 'User'),
+('USR-00014', 'Isabella Moore', '2020-10-05', 'Bangla', 1, 'isabella.moore@example.com', 'rty56789', 'User'),
+('USR-00015', 'Andrew Harris', '2021-12-24', 'Arabic', 0, 'andrew.harris@example.com', 'fgh98765', 'User'),
+('USR-00016', 'Mia Clark', '2023-06-30', 'English', 1, 'mia.clark@example.com', 'uio12345', 'User'),
+('USR-00017', 'Joshua Lee', '2019-07-15', 'Bangla', 0, 'joshua.lee@example.com', 'asd45678', 'User'),
+('USR-00018', 'Amelia Walker', '2022-11-10', 'Arabic', 1, 'amelia.walker@example.com', 'qwe56789', 'User'),
+('USR-00019', 'Ryan Hall', '2020-01-01', 'English', 1, 'ryan.hall@example.com', 'lkj09876', 'User'),
+('USR-00020', 'Charlotte Young', '2024-03-20', 'Bangla', 0, 'charlotte.young@example.com', 'tyr45678', 'User'),
+('USR-00021', 'Sophia Wilson', '2021-08-14', 'English', 1, 'sophia.wilson@example.com', 'alpha123', 'User'),
+('USR-00022', 'Benjamin Martinez', '2019-03-20', 'Bangla', 0, 'benjamin.martinez@example.com', 'beta2345', 'User'),
+('USR-00023', 'Victoria King', '2020-12-25', 'Arabic', 1, 'victoria.king@example.com', 'gamma456', 'User'),
+('USR-00024', 'Jackson White', '2024-07-09', 'English', 1, 'jackson.white@example.com', 'delta789', 'Admin'),
+('USR-00025', 'Ella Scott', '2022-09-17', 'Bangla', 0, 'ella.scott@example.com', 'echo9876', 'User'),
+('USR-00026', 'Henry Adams', '2019-06-11', 'Arabic', 1, 'henry.adams@example.com', 'foxtrot1', 'User'),
+('USR-00027', 'Grace Thomas', '2023-04-28', 'English', 1, 'grace.thomas@example.com', 'golf3456', 'User'),
+('USR-00028', 'Samuel Carter', '2022-01-05', 'Bangla', 0, 'samuel.carter@example.com', 'hotel567', 'Admin'),
+('USR-00029', 'Luna Mitchell', '2020-11-19', 'Arabic', 1, 'luna.mitchell@example.com', 'india890', 'User'),
+('USR-00030', 'Dylan Perez', '2023-10-02', 'English', 0, 'dylan.perez@example.com', 'juliet12', 'User'),
+('USR-00031', 'Madison Brooks', '2020-05-23', 'Bangla', 1, 'madison.brooks@example.com', 'kilo3456', 'User'),
+('USR-00032', 'Sebastian Edwards', '2024-06-11', 'Arabic', 1, 'sebastian.edwards@example.com', 'lima5678', 'User'),
+('USR-00033', 'Layla Bell', '2021-02-19', 'English', 1, 'layla.bell@example.com', 'mike6789', 'User'),
+('USR-00034', 'Carter Hughes', '2019-08-03', 'Bangla', 0, 'carter.hughes@example.com', 'november', 'User'),
+('USR-00035', 'Zoey Foster', '2022-05-12', 'Arabic', 1, 'zoey.foster@example.com', 'oscar123', 'User'),
+('USR-00036', 'Ethan James', '2023-09-08', 'English', 1, 'ethan.james@example.com', 'papa4567', 'User'),
+('USR-00037', 'Avery Bailey', '2020-04-30', 'Bangla', 0, 'avery.bailey@example.com', 'quebec89', 'User'),
+('USR-00038', 'Mason Rivera', '2021-12-14', 'Arabic', 1, 'mason.rivera@example.com', 'romeo012', 'User'),
+('USR-00039', 'Harper Cooper', '2023-03-21', 'English', 1, 'harper.cooper@example.com', 'sierra34', 'User'),
+('USR-00040', 'Leo Morgan', '2024-08-15', 'Bangla', 0, 'leo.morgan@example.com', 'tango567', 'User');
+
