@@ -1,17 +1,9 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import '../styles/Landing.css';
 import infoImage from '/images/info.png';
+import { NavLink } from 'react-router-dom';
 
 function Landing() {
-  const loginbtnRef = useRef(null);
-  const signupbtnRef = useRef(null);
-
-  useEffect(() => {
-    if (loginbtnRef.current && signupbtnRef.current) {
-      const signupWidth = signupbtnRef.current.offsetWidth; // Get the width of the "Sign Up" button
-      loginbtnRef.current.style.width = `${signupWidth}px`; // Apply the width to the "Log In" button
-    }
-  }, []);
 
   return (
     <div className="mainlanding">
@@ -25,12 +17,9 @@ function Landing() {
             <nobr style={{color:"#656E6F"}}>This is my small project that is still in development!!</nobr>
           </div>
           <div className="buttonline">
-            <div className="loginbtn" ref={loginbtnRef}>
+            <NavLink to={"Login"} className="loginbtn">
               Log In
-            </div>
-            <div className="signupbtn" ref={signupbtnRef}>
-              Sign Up
-            </div>
+            </NavLink>
           </div>
         </div>
       </div>

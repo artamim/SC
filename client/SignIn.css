@@ -24,6 +24,10 @@ html {
   scroll-behavior: smooth;
 }
 
+.loginfbdy html {
+  font-size: 10px;
+}
+
 body {
   background-color: #fafafa;
   height: 100vh;
@@ -33,15 +37,6 @@ body {
   justify-content: center;
   align-items: center;
   user-select: none;
-}
-
-.welcome-header{
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 70px;
-  width: 100%;
-  box-shadow: 5px 0px 8px gray;
 }
 
 /* ############################################################ */
@@ -162,7 +157,7 @@ So this means 1.4rem is 14px. */
 }
 
 .form-btn::before {
-  content: 'Sign Up';
+  content: 'Sign In';
   color: white;
   position: relative; /* Ensures it's above the pseudo-element */
   z-index: 2;

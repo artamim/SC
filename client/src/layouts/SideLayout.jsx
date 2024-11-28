@@ -19,7 +19,7 @@ export default function RootLayout() {
                 <div className="side-menu">
                     <div className="logo"></div>
                     <NavLink to="/" className="mains"><img src={monitorImage}/>Dashboard</NavLink>
-                    <NavLink to="/about" className="mains"><img src={aboutImage}/>About</NavLink>
+                    <NavLink to="about" className="mains"><img src={aboutImage}/>About</NavLink>
                     <div className="devider"></div>
                     <div className="channel">Cross Application</div>
                     <NavLink to="customer" className="route">Customer Master</NavLink>
