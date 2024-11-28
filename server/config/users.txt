@@ -5,7 +5,7 @@ CREATE TABLE users (
     xlanguage VARCHAR(20) NOT NULL,    -- Language preference
     zactive INT NOT NULL,              -- Active status (1 for active, 0 for inactive)
     xemail VARCHAR(100) NOT NULL,      -- User's email
-    password VARCHAR(8) NOT NULL,      -- User's password
+    xpassword VARCHAR(8) NOT NULL,      -- User's password
     xtype VARCHAR(20) NOT NULL         -- User type ('User' or 'Admin')
 );
 

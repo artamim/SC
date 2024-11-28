@@ -57,6 +57,8 @@ form {
   border-radius: 1px 1px 2px 2px;
   margin: 0 auto 10px auto;
   transition: all 500ms; /* This is used to animate the border later */
+  background-color: white;
+  font-size: 14px;
 }
 
 /* By default, an outline appears around form fields when they're in focus.

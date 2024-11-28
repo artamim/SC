@@ -17,7 +17,7 @@ function Landing() {
             <nobr style={{color:"#656E6F"}}>This is my small project that is still in development!!</nobr>
           </div>
           <div className="buttonline">
-            <NavLink to={"Login"} className="loginbtn">
+            <NavLink to={"login"} className="loginbtn">
               Log In
             </NavLink>
           </div>
