@@ -9,7 +9,7 @@ CREATE TABLE users (
     xtype VARCHAR(20) NOT NULL         -- User type ('User' or 'Admin')
 );
 
-INSERT INTO users (xuser, xusername, xjoindate, xlanguage, zactive, xemail, password, xtype) VALUES 
+INSERT INTO users (xuser, xusername, xjoindate, xlanguage, zactive, xemail, xpassword, xtype) VALUES 
 ('USR-00001', 'Arifur Rahman Tamim', '2018-10-12', 'Bangla', 1, 'arifur.rahman.tamim@gmail.com', '12121212', 'Admin'),
 ('USR-00002', 'John Smith', '2019-02-15', 'English', 1, 'john.smith@example.com', 'abc12345', 'User'),
 ('USR-00003', 'Emily Johnson', '2020-06-30', 'Bangla', 1, 'emily.johnson@example.com', 'xyz67890', 'Admin'),

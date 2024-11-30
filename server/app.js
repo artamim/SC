@@ -1,14 +1,16 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
-const usersRoutes = require("./controllers/users");
+const loginHandler = require("./controllers/login");
+
 app.use(cors());
-const port = 5000;
-const pool = require("./config/dbConfig"); 
 app.use(express.json());
 
-app.use("/users", usersRoutes);
+const port = 5000;
+
+// Use the login handler directly
+app.post("/login", loginHandler);
 
 app.listen(port, () => {
-    console.log(`Server running on http://localhost:${port}`);
+  console.log(`Server running on http://localhost:${port}`);
 });

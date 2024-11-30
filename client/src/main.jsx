@@ -11,7 +11,6 @@ import About from './pages/About.jsx'
 import PathNotFound from './pages/PathNotFound.jsx'
 
 //Layouts
-//import HeaderLayout from './layouts/HeaderLayout.jsx'
 import SideLayout from './layouts/SideLayout.jsx'
 const user = true
 const router = createBrowserRouter(
