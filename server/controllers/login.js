@@ -1,10 +1,11 @@
 const jwt = require("jsonwebtoken");
 const pool = require("../config/dbConfig"); // PostgreSQL pool
 const maxAge = 3 * 24 * 60 * 60; // 3 days in seconds
+require('dotenv').config();
 
 // Function to create a JWT
 const createToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET || "your_jwt_secret", {
+  return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: maxAge,
   });
 };
