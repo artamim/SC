@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { createBrowserRouter, Route, createRoutesFromElements, RouterProvider} from 'react-router-dom'
 import './index.css'
 import ProtectedRoutes from './utils/ProtectedRoutes'
+import { AuthProvider } from "./contexts/AuthContext";
 //Pages
 import Landing from './pages/Landing.jsx'
 import Login from './pages/Login.jsx'
@@ -12,13 +13,13 @@ import PathNotFound from './pages/PathNotFound.jsx'
 
 //Layouts
 import SideLayout from './layouts/SideLayout.jsx'
-const user = true
+
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route path="/" element={<Landing />} />
       <Route path="login" element={<Login />} />
-      <Route element={<ProtectedRoutes  user={user}/>}>
+      <Route element={<ProtectedRoutes />}>
         <Route path="home" element={<SideLayout />}>
           <Route index element={<Dashboard />} />
           <Route path="about" element={<About />} />
@@ -39,6 +40,8 @@ function Main(){
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
+    <AuthProvider>
       <Main />
+    </AuthProvider>
   </StrictMode>,
 )
