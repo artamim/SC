@@ -24,18 +24,21 @@ const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async (credentials) => {
-    await axiosInstance.post("/login", credentials);
-    const response = await axiosInstance.get("/user");
-    setUser(response.data);
-  };
+    try {
+      // Send login data to the backend
+      const response = await axiosInstance.post("/login", credentials);
 
-  const logout = async () => {
-    await axiosInstance.post("/logout");
-    setUser(null);
+      // On successful login, update the user state immediately
+      setUser(response.data); // Assuming response.data contains user info
+
+      // Optional: You could also store the token in localStorage or cookies here
+    } catch (error) {
+      console.error("Login failed", error);
+    }
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading }}>
+    <AuthContext.Provider value={{ user, login, loading }}>
       {children}
     </AuthContext.Provider>
   );

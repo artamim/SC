@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import { Form, useNavigation, useActionData, redirect } from "react-router-dom";
-import axios from "axios"; // Import Axios
+import axiosInstance from "../api/axiosInstance";
 import "../styles/Login.css";
 
 // Action function for form submission
-export async function action({ request }) {
+async function action({ request }) {
   const formData = await request.formData();
   const email = formData.get("email");
   const password = formData.get("password");
@@ -15,7 +15,6 @@ export async function action({ request }) {
       email,
       password,
     });
-
     // If successful, redirect to the protected route
     if (response.status === 200) {
       return redirect("/home");
@@ -78,9 +77,7 @@ function Login() {
           <button
             className="form-btn"
             type="submit"
-            disabled={navigation.state === "submitting"}
-          >
-            {navigation.state === "submitting" ? "Logging in..." : "Sign In"}
+            disabled={navigation.state === "submitting"}>
           </button>
         </Form>
       </div>
@@ -88,4 +85,4 @@ function Login() {
   );
 }
 
-export default Login;
+export { Login, action }; // Correct export syntax

@@ -1,7 +1,8 @@
 const jwt = require("jsonwebtoken");
 const pool = require("../config/dbConfig"); // PostgreSQL pool
+require("dotenv").config();
+
 const maxAge = 3 * 24 * 60 * 60; // 3 days in seconds
-require('dotenv').config();
 
 // Function to create a JWT
 const createToken = (id) => {
@@ -10,37 +11,40 @@ const createToken = (id) => {
   });
 };
 
-// Export the login handler directly
+// Login handler
 const loginHandler = async (req, res) => {
   const { email, password } = req.body;
 
   try {
+    // Fetch the user from the database using the email
     const result = await pool.query(
       "SELECT xuser, xpassword FROM users WHERE xemail = $1",
       [email]
     );
 
+    // Check if the user exists
     if (result.rows.length === 0) {
-      return res
-        .status(400)
-        .json({ errors: { email: "Email is not registered" } });
+      return res.status(400).json({ errors: { email: "Email is not registered" } });
     }
 
     const appuser = result.rows[0];
 
-    const isMatch = password === appuser.xpassword;
-    if (!isMatch) {
-      return res
-        .status(400)
-        .json({ errors: { password: "Incorrect password" } });
+    // Validate the password
+    if (password !== appuser.xpassword) {
+      return res.status(400).json({ errors: { password: "Incorrect password" } });
     }
 
+    // Create a JWT token
     const token = createToken(appuser.xuser);
+
+    // Set the JWT as an HttpOnly cookie
     res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 });
+
+    // Send a success response
     res.status(200).json({ appuser: appuser.xuser });
   } catch (err) {
-    console.error(err);
-    res.status(400).json({ errors: { database: "An error occurred" } });
+    console.error("Database error:", err);
+    res.status(500).json({ errors: { database: "An internal server error occurred" } });
   }
 };
 
