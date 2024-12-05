@@ -8,13 +8,17 @@ require("dotenv").config();
 const app = express();
 const port = 5000;
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
 app.use(express.json());
-app.use(cookieParser()); // Middleware for parsing cookies
+app.use(cookieParser());
 
-// Route handlers
 app.post("/login", loginHandler);
-app.get("/user", userHandler); // Changed POST to GET for fetching user info
+app.get("/user", userHandler);
 
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);

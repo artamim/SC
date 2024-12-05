@@ -1,31 +1,27 @@
 import { useEffect } from "react";
 import { Form, useNavigation, useActionData, redirect } from "react-router-dom";
-import axiosInstance from "../api/axiosInstance";
+import axiosInstance from "../api/axiosInstance"; // Use the existing axios instance
 import "../styles/Login.css";
 
-// Action function for form submission
 async function action({ request }) {
   const formData = await request.formData();
   const email = formData.get("email");
   const password = formData.get("password");
 
   try {
-    // Use Axios to send login data to the backend
-    const response = await axios.post("http://localhost:5000/login", {
+    const response = await axiosInstance.post("/login", {
       email,
       password,
     });
-    // If successful, redirect to the protected route
+
     if (response.status === 200) {
       return redirect("/home");
     }
   } catch (err) {
-    // Handle errors returned from the backend
     if (err.response && err.response.data.errors) {
       const errors = err.response.data.errors;
       return errors.email || errors.password || "Login failed";
     }
-    // Handle network or unexpected errors
     return "An unexpected error occurred. Please try again.";
   }
 }
@@ -48,9 +44,8 @@ function Login() {
         <Form method="post">
           <h1 className="form-header">Sign In</h1>
 
-          {errorMessage && (
-            <p className="error-message">{errorMessage}</p>
-          )}
+          {/* Display error message if available */}
+          {errorMessage && <p className="error-message">{errorMessage}</p>}
 
           <input
             type="email"
@@ -85,4 +80,4 @@ function Login() {
   );
 }
 
-export { Login, action }; // Correct export syntax
+export { Login, action };
