@@ -11,7 +11,8 @@ const userHandler = async (req, res) => {
 
   try {
     const user = jwt.verify(token, SECRET); // Verify the JWT
-    res.json(user); // Respond with the user payload from the token
+    //console.log(`111_______________${JSON.stringify(user.id)}`)
+    res.json(user.id); // Respond with the user payload from the token
   } catch (error) {
     res.status(403).json({ error: "Invalid token" });
   }

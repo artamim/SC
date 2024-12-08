@@ -1,36 +1,54 @@
-#root {
-  margin: 0 auto;
-  text-align: center;
+.container{
+  padding: 20px;
+  padding-left: 50px;
+  padding-right: 50px;
 }
 
-.cols{
+.crud-form{
+  border: 1px solid #c5c3c3;
+  border-radius: 6px;
+  padding-top: 20px;
+  padding-left: 30px;
+  padding-right: 30px;
+  padding-bottom: 20px;
+}
+
+.form-layout-2{
+  display: grid;
   text-align: left;
+  grid-template-columns: 2fr 2fr;
 }
 
-.cols > h3{
-  display: inline-block;
-  border-bottom: 2px solid #83D8F9;
-  color: #656E6F;
-  font-weight: bold;
-  padding-right: 40px;
+.input-form{
+  display: flex;
+  padding: 20px;
+  align-items: center;
 }
 
-.cols > ul{
-  list-style-type: none;
+.form-input{
+  flex: 1;
+  padding: 7px;
+  outline: 0;
+  border: 1.5px solid #cecccc;
+  border-radius: 2px;
 }
 
-.cols > ul > li{
-  cursor: pointer;
-  border-radius: 3px;
-  padding: 5px;
-  width: 70%;
-  color: #444A4B;
-  font-weight: bold;
+.form-input:focus{
+  border: 1.5px solid #069ab8;
+  transition: border .3s;
 }
 
-.cols > ul > li:hover{
-  background-color: #4AC7EC;
-  padding-left: 20px;
-  transition: .4s;
+.form-btn{
+  margin-left: auto;
+  background-color: #15B2D1;
   color: white;
+  margin-top: 20px;
+  border: none;
 }
+
+.form-btn:hover{
+  background-color: #25d1f3;
+  transition: background-color .3s;
+  transition-delay: .1s;
+}
+

@@ -13,7 +13,7 @@ async function action({ request }) {
       email,
       password,
     });
-
+    
     if (response.status === 200) {
       return redirect("/home");
     }
@@ -41,7 +41,7 @@ function Login() {
   return (
     <div className="loginfbdy">
       <div className="container1">
-        <Form method="post">
+        <Form method="post" className="login-form">
           <h1 className="form-header">Sign In</h1>
 
           {/* Display error message if available */}

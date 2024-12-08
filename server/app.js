@@ -3,6 +3,7 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser"); // Correct placement
 const loginHandler = require("./controllers/login");
 const userHandler = require("./controllers/user");
+const signoutHandler = require("./controllers/signout");
 require("dotenv").config();
 
 const app = express();
@@ -19,6 +20,7 @@ app.use(cookieParser());
 
 app.post("/login", loginHandler);
 app.get("/user", userHandler);
+app.get("/signout", signoutHandler);
 
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);

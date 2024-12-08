@@ -27,13 +27,16 @@
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .side-menu::-webkit-scrollbar {
   display: none;
 }
 
-.side-menu>a:hover{
+.side-menu .side-menu-route >a:hover{
   color: white;
   background-color: #15B2D1;
   padding-left: 35px;
@@ -83,6 +86,34 @@
   width: 82%;
   height: 100%;
   overflow-y: auto;
+}
+
+.signout{
+  text-align: center;
+  padding: 10px;
+  border-top: 2px solid #A9B5B8;
+}
+
+.signout>b{
+  font-size: 20px;
+}
+
+.signout>a>img{
+  height: 20px;
+  margin-left: 10px;
+}
+
+.signout>a>:hover{
+  color: white;
+}
+
+.side-menu-route{
+  max-height: 80%;
+  overflow: auto;
+}
+
+.side-menu-route::-webkit-scrollbar {
+  display: none;
 }
 /*https://goodpalette.io/15b2d1-6bf227-a9b5b8*/
 
