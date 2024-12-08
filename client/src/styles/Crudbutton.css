@@ -1,0 +1,60 @@
+
+.crudbuttonlist{
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  margin-bottom: 20px;
+}
+
+.form-btn{
+  margin-left: auto;
+  background-color: #15B2D1;
+  color: white;
+  margin-top: 20px;
+  border: none;
+  margin: 0%;
+  padding-left: 12px;
+  padding-right: 12px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border-radius: 3px;
+}
+
+.form-btn:hover{
+  background-color: #25d1f3;
+  transition: background-color .3s;
+  transition-delay: .1s;
+}
+
+.btn-clear{
+  background-color: #DE31BB;
+}
+
+.btn-clear:hover{
+  background-color: #F161CC;
+}
+
+.btn-add{
+  background-color: #9dce69;
+  margin-left: 20px;
+}
+
+.btn-add:hover{
+  background-color: rgb(161, 236, 124);
+}
+
+.btn-update{
+  background-color: #FC8F54;
+}
+
+.btn-update:hover{
+  background-color: #f6b490;
+}
+
+.btn-delete{
+  background-color: #F72C5B;
+}
+
+.btn-delete:hover{
+  background-color: #f97896;
+}

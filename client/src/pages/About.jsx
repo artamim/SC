@@ -1,8 +1,6 @@
-import { useState } from 'react'
 import '../styles/About.css'
 
 function About() {
-  const [count, setCount] = useState(0)
 
   return (
     <div className = "abt-mn-main">
