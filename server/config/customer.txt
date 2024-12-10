@@ -1,0 +1,10 @@
+CREATE TABLE customers (
+    xcus VARCHAR(20) PRIMARY KEY,            -- Customer Code, e.g., "CUS-000001"
+    xorg VARCHAR(255) NOT NULL,             -- Organization/Customer Name
+    xadd1 TEXT,                             -- Address (optional, can be NULL)
+    xphone VARCHAR(15),                     -- Phone Number
+    xemail VARCHAR(255) UNIQUE,             -- Email Address (optional, unique constraint to avoid duplicates)
+    xempnum VARCHAR(20),                    -- Salesperson or Employee Number (optional)
+    created_at TIMESTAMP DEFAULT NOW(),     -- Timestamp for when the record was created
+    updated_at TIMESTAMP DEFAULT NOW()      -- Timestamp for last update
+);

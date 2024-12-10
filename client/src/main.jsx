@@ -7,7 +7,7 @@ import { AuthProvider } from "./contexts/AuthContext";
 //Pages
 import Landing from './pages/Landing.jsx'
 import {Login, action as loginAction} from './pages/Login.jsx'
-import {Customer, action as customerAction} from './pages/Customer.jsx'
+import {Customer, action as customerHandler} from './pages/Customer.jsx'
 import Signout from './pages/Signout.jsx'
 import Dashboard from './pages/Dashboard.jsx'
 import About from './pages/About.jsx'
@@ -26,7 +26,7 @@ const router = createBrowserRouter(
         <Route path="home" element={<SideLayout />}>
           <Route index element={<Dashboard />} />
           <Route path="about" element={<About />} />
-          <Route path="customer" element={<Customer />} action={customerAction} />
+          <Route path="customer" element={<Customer />} action={customerHandler} />
         </Route>
       </Route>
       <Route path="*" element={<PathNotFound />} />

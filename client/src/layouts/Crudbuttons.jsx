@@ -7,45 +7,36 @@ function Crudbuttons() {
 
       <button
         className="form-btn"
-        type="submit"
-        name="action"
-        value="show"
+        type="button"
+        onClick={() => handleAction("handleShow")}
       >
         Show
       </button>
-
       <button
         className="form-btn btn-clear"
-        type="submit"
-        name="action"
-        value="clear"
+        type="button"
+        onClick={() => handleAction("handleClear")}
       >
         Clear
       </button>
-
       <button
         className="form-btn btn-add"
-        type="submit"
-        name="action"
-        value="add"
+        type="button"
+        onClick={() => handleAction("handleAdd")}
       >
         Add
       </button>
-
       <button
         className="form-btn btn-update"
-        type="submit"
-        name="action"
-        value="update"
+        type="button"
+        onClick={() => handleAction("handleUpdate")}
       >
         Update
       </button>
-
       <button
         className="form-btn btn-delete"
-        type="submit"
-        name="action"
-        value="delete"
+        type="button"
+        onClick={() => handleAction("handleDelete")}
       >
         Delete
       </button>
