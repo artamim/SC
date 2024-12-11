@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "../styles/Customer.css";
 import Crudbuttons from "../layouts/Crudbuttons"; // Your custom CRUD button layout
-import axios from "axios";
+import axiosInstance from "../api/axiosInstance";;
 
 // Reusable Input Field Component
 function RenderInputField({ placeholder, id, type, className, value, onChange, trn }) {
@@ -26,6 +26,8 @@ function RenderInputField({ placeholder, id, type, className, value, onChange, t
 }
 
 function Customer() {
+  const [actionmsg, setactionmsg] = useState("");
+  const [isDisabled, setIsDisabled] = useState(false); // State to disable buttons
   const [formData, setFormData] = useState({
     xcus: "",
     xorg: "",
@@ -48,46 +50,96 @@ function Customer() {
       xemail: "",
       xempnum: "",
     });
-    console.log("Form cleared");
+    setactionmsg("");
+  };
+
+  const handleActionStart = () => {
+    setIsDisabled(true); // Disable buttons when action starts
+  };
+
+  const handleActionComplete = () => {
+    setTimeout(() => {
+      setIsDisabled(false); // Re-enable buttons 1 second after action finishes
+    }, 1000);
   };
 
   const handleAdd = async () => {
+    handleActionStart();
     try {
-      const response = await axios.post("/customer/add", formData);
-      console.log("Customer added:", response.data);
+      const response = await axiosInstance.post("/customer/add", formData);
+      setFormData((prevData) => ({
+        ...prevData,
+        xcus: response.data.xcus,
+      }));
+      setactionmsg(`Customer ${response.data.xcus} Added Successfully`);
     } catch (error) {
-      console.error("Error adding customer:", error);
+      setactionmsg(`Error Adding Customer: ${error}`);
+    } finally {
+      handleActionComplete();
     }
   };
 
   const handleShow = async () => {
+    if (formData.xcus === "") {
+      setactionmsg("Error: Customer Code Cannot Be Empty");
+      return;
+    }
+    handleActionStart();
     try {
-      const response = await axios.get("/customer/show", {
+      const response = await axiosInstance.get("/customer/show", {
         params: { xcus: formData.xcus },
       });
-      console.log("Customer details:", response.data);
+
+      if (response.data) {
+        setFormData(response.data);
+        setactionmsg("");
+      }
     } catch (error) {
-      console.error("Error fetching customer:", error);
+      setactionmsg(`Error Fetching Customer: ${error.response?.data?.error || error.message}`);
+    } finally {
+      handleActionComplete();
     }
   };
 
   const handleUpdate = async () => {
+    if (formData.xcus === "") {
+      setactionmsg("Error: Customer Code Cannot Be Empty");
+      return;
+    }
+    handleActionStart();
     try {
-      const response = await axios.put("/customer/update", formData);
-      console.log("Customer updated:", response.data);
+      const response = await axiosInstance.put("/customer/update", formData);
+      setactionmsg(`Customer ${formData.xcus} Updated Successfully`);
     } catch (error) {
-      console.error("Error updating customer:", error);
+      setactionmsg(`Error Updating Customer: ${error}`);
+    } finally {
+      handleActionComplete();
     }
   };
 
   const handleDelete = async () => {
+    if (formData.xcus === "") {
+      setactionmsg("Error: Customer Code Cannot Be Empty");
+      return;
+    }
+    handleActionStart();
     try {
-      const response = await axios.delete("/customer/delete", {
+      const response = await axiosInstance.delete("/customer/delete", {
         data: { xcus: formData.xcus },
       });
-      console.log("Customer deleted:", response.data);
+      setactionmsg(`Customer ${formData.xcus} Deleted Successfully`);
+      setFormData({
+        xcus: "",
+        xorg: "",
+        xadd1: "",
+        xphone: "",
+        xemail: "",
+        xempnum: "",
+      });
     } catch (error) {
-      console.error("Error deleting customer:", error);
+      setactionmsg(`Error Deleting Customer: ${error}`);
+    } finally {
+      handleActionComplete();
     }
   };
 
@@ -96,14 +148,18 @@ function Customer() {
       <h2>
         <b>Customer Master</b>
       </h2>
+      <h6 style={{ color: actionmsg.includes("Error") ? "red" : "green" }}>
+        <b>{actionmsg}</b>
+      </h6>
       <div className="crud-form">
-        {/* CRUD Buttons Component */}
+        {/* Pass the disabled state to the CRUD buttons */}
         <Crudbuttons
           handleShow={handleShow}
           handleClear={handleClear}
           handleAdd={handleAdd}
           handleUpdate={handleUpdate}
           handleDelete={handleDelete}
+          isDisabled={isDisabled} // Pass disabled state
         />
 
         {/* Form Inputs */}

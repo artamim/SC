@@ -1,48 +1,45 @@
-import '../styles/Crudbutton.css'
+import '../styles/Crudbutton.css';
 
-function Crudbuttons() {
-
+function Crudbuttons({ handleShow, handleClear, handleAdd, handleUpdate, handleDelete }) {
   return (
     <div className="crudbuttonlist">
-
       <button
         className="form-btn"
         type="button"
-        onClick={() => handleAction("handleShow")}
+        onClick={handleShow}
       >
         Show
       </button>
       <button
         className="form-btn btn-clear"
         type="button"
-        onClick={() => handleAction("handleClear")}
+        onClick={handleClear}
       >
         Clear
       </button>
       <button
         className="form-btn btn-add"
         type="button"
-        onClick={() => handleAction("handleAdd")}
+        onClick={handleAdd}
       >
         Add
       </button>
       <button
         className="form-btn btn-update"
         type="button"
-        onClick={() => handleAction("handleUpdate")}
+        onClick={handleUpdate}
       >
         Update
       </button>
       <button
         className="form-btn btn-delete"
         type="button"
-        onClick={() => handleAction("handleDelete")}
+        onClick={handleDelete}
       >
         Delete
       </button>
-
     </div>
-  )
+  );
 }
 
-export default Crudbuttons
+export default Crudbuttons;

@@ -4,7 +4,7 @@ const cookieParser = require("cookie-parser"); // Correct placement
 const loginHandler = require("./controllers/login");
 const userHandler = require("./controllers/user");
 const signoutHandler = require("./controllers/signout");
-const customerHandler = require("./controllers/customer");
+const customerRoutes = require("./routes/customerRoute");
 require("dotenv").config();
 
 const app = express();
@@ -18,11 +18,11 @@ app.use(
 );
 app.use(express.json());
 app.use(cookieParser());
+app.use("/customer", customerRoutes);
 
 app.post("/login", loginHandler);
 app.get("/user", userHandler);
 app.get("/signout", signoutHandler);
-app.get("/customer/:action", customerHandler);
 
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
