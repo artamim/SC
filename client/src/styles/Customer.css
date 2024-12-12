@@ -43,8 +43,8 @@
   flex: 1;
   padding: 7px;
   outline: 0;
-  border: 1.5px solid #cecccc;
-  border-radius: 2px;
+  border: 1px solid #cecccc;
+  border-radius: 1px;
   background-color: white;
   color: black;
 }
@@ -68,3 +68,21 @@
   background-color: #CB51DF;
 }
 
+.detail-list{
+  margin-top: 40px;
+  width: 100%;
+  border-radius: 1px;
+}
+
+.detail-list > tr > th, .detail-list > tr > td{
+  text-align: left;
+  padding: 10px;
+}
+
+.detail-list > tr > th{
+  border-bottom: 1px solid black;
+}
+
+.detail-list > tr > td{
+  color: #656E6F;
+}

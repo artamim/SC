@@ -76,6 +76,11 @@ function Login() {
           </button>
         </Form>
       </div>
+      <div className="login-hinter">
+        <div>Use These Credentials:</div>
+        <div>email: arifur.rahman.tamim@gmail.com</div>
+        <div>password: 12121212</div>
+      </div>
     </div>
   );
 }

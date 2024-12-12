@@ -177,3 +177,17 @@ So this means 1.4rem is 14px. */
 .login-form .form-btn:hover::after {
   width: 100%; /* Expand fully to match the button width */
 }
+
+.error-message{
+  font-size: 15px;
+  color: red;
+  font-weight: bold;
+}
+
+.login-hinter{
+  margin-left: 30px;
+  font-size: 13px;
+  border: 1px solid rgb(117, 117, 117);
+  border-radius: 5px;
+  padding: 20px;
+}
