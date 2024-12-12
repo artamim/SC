@@ -145,6 +145,9 @@ function Customer() {
 
   return (
     <div className="container">
+
+      {/*------------------------FORM--------------------*/}
+
       <h2>
         <b>Customer Master</b>
       </h2>
@@ -218,6 +221,28 @@ function Customer() {
           />
         </div>
       </div>
+
+      {/*------------------------FORM--------------------*/}
+
+      <table className="detail-list">
+        <tr>
+          <th>Customer Code</th>
+          <th>Customer Name</th>
+          <th>Customer Address</th>
+          <th>Phone</th>
+          <th>Email</th>
+          <th>Sales Person</th>
+        </tr>
+        <tr>
+          <td>Customer Code</td>
+          <td>Customer Name</td>
+          <td>Customer Address</td>
+          <td>Phone</td>
+          <td>Email</td>
+          <td>Sales Person</td>
+        </tr>
+      </table>
+
     </div>
   );
 }
