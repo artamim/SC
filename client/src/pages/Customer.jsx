@@ -29,7 +29,8 @@ function Customer() {
   const [actionmsg, setactionmsg] = useState("");
   const [isDisabled, setIsDisabled] = useState(false); // State to disable buttons
   const [customers, setCustomers] = useState([]);
-  const [listlimit, setlistlimit] = useState(10);
+  const [listoffset, setlistoffset] = useState(10);
+  const [totalCustomers, setTotalCustomers] = useState(0);
   const [formData, setFormData] = useState({
     xcus: "",
     xorg: "",
@@ -39,13 +40,12 @@ function Customer() {
     xempnum: "",
   });
 
-  const limitdec = () => {
-    console.log("oqihwoeiqowiej")
-    setlistlimit(prev => Math.max(prev - 10, 10)); // Decrease by 10, with a minimum limit of 10
+  const offsetdec = () => {
+    setlistoffset(prev => Math.max(prev - 10, 0)); // Decrease by 10, with a minimum limit of 0
   };
 
-  const limitinc = () => {
-    setlistlimit(prev => (prev - 10));
+  const offsetinc = () => {
+    setlistoffset(prev => (prev + 10));
   };
 
 
@@ -154,17 +154,17 @@ function Customer() {
       handleActionComplete();
     }
   };
-  console.log(listlimit)
+  
   const handleShowAll = async () => {
     handleActionStart();
     try {
-      console.log(listlimit)
       const response = await axiosInstance.get("/customer/showall", {
-        params: { limit: listlimit, offset: 0 }, // Pass limit and offset
+        params: { offset: listoffset }, // Pass offset
       });
   
       if (response.data) {
-        setCustomers(response.data);
+        setCustomers(response.data.customers);
+        setTotalCustomers(response.data.total);
         setactionmsg("");
       }
     } catch (error) {
@@ -178,7 +178,7 @@ function Customer() {
   // Fetch customers when the component mounts
   useEffect(() => {
     handleShowAll();
-  }, [listlimit]);
+  }, [listoffset]);
 
   return (
     <div className="container">
@@ -290,8 +290,19 @@ function Customer() {
           )}
       </table>
 
-      <button className="pagination-btn-lt" onClick={limitdec}>&lt;</button>
-      <button className="pagination-btn-gt" onClick={limitinc}>&gt;</button>
+      <button 
+        className="pagination-btn-lt" 
+        onClick={offsetdec} 
+        style={listoffset === 0 ? { pointerEvents: "none", opacity: 0.5 } : {}}
+          >&lt;
+      </button>
+      <button 
+        className="pagination-btn-gt" 
+        onClick={offsetinc}
+        style={
+          listoffset + 10 >= totalCustomers ? { pointerEvents: "none", opacity: 0.5 } : {} }
+          >&gt;
+      </button>
 
     </div>
   );

@@ -79,14 +79,16 @@ exports.deleteCustomer = async (req, res) => {
 
 // Show all customer
 exports.showallCustomers = async (req, res) => {
-  let { limit, offset } = req.body;
-
-  limit = parseInt(limit) || 10; // Default limit = 10
-  offset = parseInt(offset) || 0; // Default offset = 0
+  const { offset } = req.query;
   try {
-    const result = await pool.query(`SELECT * FROM cacus limit $1 offset $2`, [limit, offset]);
-    if (result.rows.length > 0) {
-      res.status(200).json(result.rows);
+    const customersResult = await pool.query(`SELECT * FROM cacus limit 10 offset $1`, [offset]);
+    const countResult = await pool.query(`SELECT COUNT(*) AS total FROM cacus`);
+    const total = parseInt(countResult.rows[0].total, 10);
+    if (customersResult.rows.length > 0) {
+      res.status(200).json({
+        customers: customersResult.rows,
+        total,
+      });
     } else {
       res.status(404).json({ error: "No customers found" });
     }
