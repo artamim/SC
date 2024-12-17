@@ -76,3 +76,22 @@ exports.deleteCustomer = async (req, res) => {
     res.status(500).json({ error: "Failed to delete customer" });
   }
 };
+
+// Show all customer
+exports.showallCustomers = async (req, res) => {
+  let { limit, offset } = req.body;
+
+  limit = parseInt(limit) || 10; // Default limit = 10
+  offset = parseInt(offset) || 0; // Default offset = 0
+  try {
+    const result = await pool.query(`SELECT * FROM cacus limit $1 offset $2`, [limit, offset]);
+    if (result.rows.length > 0) {
+      res.status(200).json(result.rows);
+    } else {
+      res.status(404).json({ error: "No customers found" });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to fetch customers" });
+  }
+};

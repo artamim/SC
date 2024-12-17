@@ -72,6 +72,7 @@
   margin-top: 40px;
   width: 100%;
   border-radius: 1px;
+  margin-bottom: 40px;
 }
 
 .detail-list > tr > th, .detail-list > tr > td{
@@ -85,4 +86,20 @@
 
 .detail-list > tr > td{
   color: #656E6F;
+}
+
+.pagination-btn-lt{
+  background-color: white;
+  color: #656E6F;
+  border: 2px solid #656E6F;
+  border-radius: 10px;
+  margin-right: 10px;
+}
+
+.pagination-btn-gt{
+  background-color: white;
+  color: #656E6F;
+  border: 2px solid #656E6F;
+  border-radius: 10px;
+  margin-left: 10px;
 }

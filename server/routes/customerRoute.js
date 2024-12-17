@@ -6,5 +6,6 @@ router.post("/add", customerHandler.addCustomer);
 router.get("/show", customerHandler.showCustomer);
 router.put("/update", customerHandler.updateCustomer);
 router.delete("/delete", customerHandler.deleteCustomer);
+router.get("/showall", customerHandler.showallCustomers);
 
 module.exports = router;

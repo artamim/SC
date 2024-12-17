@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "../styles/Customer.css";
 import Crudbuttons from "../layouts/Crudbuttons"; // Your custom CRUD button layout
 import axiosInstance from "../api/axiosInstance";;
@@ -28,6 +28,8 @@ function RenderInputField({ placeholder, id, type, className, value, onChange, t
 function Customer() {
   const [actionmsg, setactionmsg] = useState("");
   const [isDisabled, setIsDisabled] = useState(false); // State to disable buttons
+  const [customers, setCustomers] = useState([]);
+  const [listlimit, setlistlimit] = useState(10);
   const [formData, setFormData] = useState({
     xcus: "",
     xorg: "",
@@ -36,6 +38,16 @@ function Customer() {
     xemail: "",
     xempnum: "",
   });
+
+  const limitdec = () => {
+    console.log("oqihwoeiqowiej")
+    setlistlimit(prev => Math.max(prev - 10, 10)); // Decrease by 10, with a minimum limit of 10
+  };
+
+  const limitinc = () => {
+    setlistlimit(prev => (prev - 10));
+  };
+
 
   const handleInputChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -142,6 +154,31 @@ function Customer() {
       handleActionComplete();
     }
   };
+  console.log(listlimit)
+  const handleShowAll = async () => {
+    handleActionStart();
+    try {
+      console.log(listlimit)
+      const response = await axiosInstance.get("/customer/showall", {
+        params: { limit: listlimit, offset: 0 }, // Pass limit and offset
+      });
+  
+      if (response.data) {
+        setCustomers(response.data);
+        setactionmsg("");
+      }
+    } catch (error) {
+      setactionmsg(`Error Fetching Customers: ${error.response?.data?.error || error.message}`);
+    } finally {
+      handleActionComplete();
+    }
+  };
+  
+
+  // Fetch customers when the component mounts
+  useEffect(() => {
+    handleShowAll();
+  }, [listlimit]);
 
   return (
     <div className="container">
@@ -233,15 +270,28 @@ function Customer() {
           <th>Email</th>
           <th>Sales Person</th>
         </tr>
-        <tr>
-          <td>Customer Code</td>
-          <td>Customer Name</td>
-          <td>Customer Address</td>
-          <td>Phone</td>
-          <td>Email</td>
-          <td>Sales Person</td>
-        </tr>
+        {customers.length > 0 ? (
+            customers.map((customer, index) => (
+              <tr key={index}>
+                <td>{customer.xcus}</td>
+                <td>{customer.xorg}</td>
+                <td>{customer.xadd1}</td>
+                <td>{customer.xphone}</td>
+                <td>{customer.xemail}</td>
+                <td>{customer.xempnum}</td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="6" style={{ textAlign: "center" }}>
+                No Customers Found
+              </td>
+            </tr>
+          )}
       </table>
+
+      <button className="pagination-btn-lt" onClick={limitdec}>&lt;</button>
+      <button className="pagination-btn-gt" onClick={limitinc}>&gt;</button>
 
     </div>
   );
