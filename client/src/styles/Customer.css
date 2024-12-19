@@ -31,22 +31,17 @@
   grid-template-columns: 2fr 2fr;
 }
 
-.input-form{
-  display: flex;
-  padding: 20px;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  align-items: center;
-}
-
 .form-input{
   flex: 1;
-  padding: 7px;
+  padding: 5px;
   outline: 0;
   border: 1px solid #cecccc;
   border-radius: 1px;
   background-color: white;
   color: black;
+  margin: 20px;
+  margin-top: 8px;
+  margin-bottom: 8px;
 }
 
 .form-input:focus{

@@ -1,36 +1,9 @@
 import { useState, useEffect } from "react";
 import "../styles/Customer.css";
-import Crudbuttons from "../layouts/Crudbuttons"; // Your custom CRUD button layout
-import axiosInstance from "../api/axiosInstance";;
+import Crudbuttons from "../layouts/Crudbuttons";
+import { handleApiRequest } from "../utils/basicCrudApiUtils";
 
-// Reusable Input Field Component
-function RenderInputField({ placeholder, id, type, className, value, onChange, trn }) {
-  return (
-    <div className="input-form">
-      <input
-        type={type}
-        name={id}
-        id={id}
-        className={className}
-        placeholder={placeholder}
-        value={value}
-        onChange={(e) => onChange(id, e.target.value)}
-      />
-      {trn === "true" && (
-        <button className="trn-btn" type="button">
-          {/* Optional Icon/Button logic for transaction buttons */}
-        </button>
-      )}
-    </div>
-  );
-}
-
-function Customer() {
-  const [actionmsg, setactionmsg] = useState("");
-  const [isDisabled, setIsDisabled] = useState(false); // State to disable buttons
-  const [customers, setCustomers] = useState([]);
-  const [listoffset, setlistoffset] = useState(10);
-  const [totalCustomers, setTotalCustomers] = useState(0);
+function CustomerManager() {
   const [formData, setFormData] = useState({
     xcus: "",
     xorg: "",
@@ -39,16 +12,31 @@ function Customer() {
     xemail: "",
     xempnum: "",
   });
+  const [customers, setCustomers] = useState([]);
+  const [actionmsg, setActionMsg] = useState("");
+  const [isDisabled, setIsDisabled] = useState(false);
+  const [listoffset, setListOffset] = useState(0);
+  const [totalCustomers, setTotalCustomers] = useState(0);
 
-  const offsetdec = () => {
-    setlistoffset(prev => Math.max(prev - 10, 0)); // Decrease by 10, with a minimum limit of 0
+  // Fetch customers with pagination
+  const fetchCustomers = () => {
+    handleApiRequest({
+      endpoint: "/customer/showall",
+      method: "GET",
+      params: { offset: listoffset },
+      onSuccess: (data) => {
+        setCustomers(data.customers);
+        setTotalCustomers(data.total);
+      },
+      onError: (error) => setActionMsg(`Error: ${error}`),
+    });
   };
 
-  const offsetinc = () => {
-    setlistoffset(prev => (prev + 10));
-  };
+  useEffect(() => {
+    fetchCustomers();
+  }, [listoffset]);
 
-
+  // Handle form input changes
   const handleInputChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
@@ -62,205 +50,100 @@ function Customer() {
       xemail: "",
       xempnum: "",
     });
-    setactionmsg("");
+    setActionMsg("");
   };
 
-  const handleActionStart = () => {
-    setIsDisabled(true); // Disable buttons when action starts
+  // Handle customer actions
+  const handleAction = (endpoint, method, successMsg) => {
+    setIsDisabled(true);
+    handleApiRequest({
+      endpoint,
+      method,
+      data: method === "GET" ? {} : formData, // Include `formData` only for non-GET requests
+      params: method === "GET" ? { xcus: formData.xcus } : {}, // Pass xcus in params for GET requests
+      onSuccess: (data) => {
+        setActionMsg(successMsg);
+        if (data?.xcus) setFormData((prev) => ({ ...prev, ...data }));
+        fetchCustomers();
+      },
+      onError: (error) => setActionMsg(`Error: ${error}`),
+    });
+    setTimeout(() => setIsDisabled(false), 1000);
   };
-
-  const handleActionComplete = () => {
-    setTimeout(() => {
-      setIsDisabled(false); // Re-enable buttons 1 second after action finishes
-    }, 1000);
-  };
-
-  const handleAdd = async () => {
-    handleActionStart();
-    try {
-      const response = await axiosInstance.post("/customer/add", formData);
-      setFormData((prevData) => ({
-        ...prevData,
-        xcus: response.data.xcus,
-      }));
-      setactionmsg(`Customer ${response.data.xcus} Added Successfully`);
-    } catch (error) {
-      setactionmsg(`Error Adding Customer: ${error}`);
-    } finally {
-      handleActionComplete();
-    }
-  };
-
-  const handleShow = async () => {
-    if (formData.xcus === "") {
-      setactionmsg("Error: Customer Code Cannot Be Empty");
-      return;
-    }
-    handleActionStart();
-    try {
-      const response = await axiosInstance.get("/customer/show", {
-        params: { xcus: formData.xcus },
-      });
-
-      if (response.data) {
-        setFormData(response.data);
-        setactionmsg("");
-      }
-    } catch (error) {
-      setactionmsg(`Error Fetching Customer: ${error.response?.data?.error || error.message}`);
-    } finally {
-      handleActionComplete();
-    }
-  };
-
-  const handleUpdate = async () => {
-    if (formData.xcus === "") {
-      setactionmsg("Error: Customer Code Cannot Be Empty");
-      return;
-    }
-    handleActionStart();
-    try {
-      const response = await axiosInstance.put("/customer/update", formData);
-      setactionmsg(`Customer ${formData.xcus} Updated Successfully`);
-    } catch (error) {
-      setactionmsg(`Error Updating Customer: ${error}`);
-    } finally {
-      handleActionComplete();
-    }
-  };
-
-  const handleDelete = async () => {
-    if (formData.xcus === "") {
-      setactionmsg("Error: Customer Code Cannot Be Empty");
-      return;
-    }
-    handleActionStart();
-    try {
-      const response = await axiosInstance.delete("/customer/delete", {
-        data: { xcus: formData.xcus },
-      });
-      setactionmsg(`Customer ${formData.xcus} Deleted Successfully`);
-      setFormData({
-        xcus: "",
-        xorg: "",
-        xadd1: "",
-        xphone: "",
-        xemail: "",
-        xempnum: "",
-      });
-    } catch (error) {
-      setactionmsg(`Error Deleting Customer: ${error}`);
-    } finally {
-      handleActionComplete();
-    }
-  };
-  
-  const handleShowAll = async () => {
-    handleActionStart();
-    try {
-      const response = await axiosInstance.get("/customer/showall", {
-        params: { offset: listoffset }, // Pass offset
-      });
-  
-      if (response.data) {
-        setCustomers(response.data.customers);
-        setTotalCustomers(response.data.total);
-        setactionmsg("");
-      }
-    } catch (error) {
-      setactionmsg(`Error Fetching Customers: ${error.response?.data?.error || error.message}`);
-    } finally {
-      handleActionComplete();
-    }
-  };
-  
-
-  // Fetch customers when the component mounts
-  useEffect(() => {
-    handleShowAll();
-  }, [listoffset]);
 
   return (
     <div className="container">
-
-      {/*------------------------FORM--------------------*/}
-
-      <h2>
+    <h2>
         <b>Customer Master</b>
-      </h2>
-      <h6 style={{ color: actionmsg.includes("Error") ? "red" : "green" }}>
-        <b>{actionmsg}</b>
-      </h6>
-      <div className="crud-form">
-        {/* Pass the disabled state to the CRUD buttons */}
+    </h2>
+    <p style={{ color: actionmsg.includes("Error") ? "red" : "green" }}><b>{actionmsg}</b></p>
+
+    <div className="crud-form">
+      {/* Action Buttons */}
         <Crudbuttons
-          handleShow={handleShow}
+          handleShow={() => handleAction("/customer/show", "GET", "Customer fetched successfully")}
           handleClear={handleClear}
-          handleAdd={handleAdd}
-          handleUpdate={handleUpdate}
-          handleDelete={handleDelete}
-          isDisabled={isDisabled} // Pass disabled state
+          handleAdd={() => handleAction("/customer/add", "POST", "Customer added successfully")}
+          handleUpdate={() => handleAction("/customer/update", "PUT", "Customer updated successfully")}
+          handleDelete={() => handleAction("/customer/delete", "DELETE", "Customer deleted successfully")}
+          isDisabled={isDisabled}
         />
 
-        {/* Form Inputs */}
+        {/* Form for Customer Details */}
         <div className="form-layout-2">
-          <RenderInputField
-            placeholder="Customer Code"
-            id="xcus"
+          <input
             type="text"
+            placeholder="Customer Code"
             className="form-input"
             value={formData.xcus}
-            onChange={handleInputChange}
+            onChange={(e) => handleInputChange("xcus", e.target.value)}
           />
-          <RenderInputField
-            placeholder="Customer Name"
-            id="xorg"
+          <input
             type="text"
+            placeholder="Customer Name"
             className="form-input"
             value={formData.xorg}
-            onChange={handleInputChange}
+            onChange={(e) => handleInputChange("xorg", e.target.value)}
           />
         </div>
+
         <div className="form-layout-2">
-          <RenderInputField
-            placeholder="Customer Address"
-            id="xadd1"
+          <input
             type="text"
+            placeholder="Customer Address"
             className="form-input"
             value={formData.xadd1}
-            onChange={handleInputChange}
+            onChange={(e) => handleInputChange("xadd1", e.target.value)}
           />
-          <RenderInputField
-            placeholder="Phone"
-            id="xphone"
+          <input
             type="tel"
+            placeholder="Customer Phone"
             className="form-input"
             value={formData.xphone}
-            onChange={handleInputChange}
+            onChange={(e) => handleInputChange("xphone", e.target.value)}
           />
         </div>
+
         <div className="form-layout-2">
-          <RenderInputField
-            placeholder="Email"
-            id="xemail"
+          <input
             type="email"
+            placeholder="Customer Email"
             className="form-input"
             value={formData.xemail}
-            onChange={handleInputChange}
+            onChange={(e) => handleInputChange("xemail", e.target.value)}
           />
-          <RenderInputField
-            placeholder="Sales Person"
-            id="xempnum"
+          <input
             type="text"
+            placeholder="Sales Person"
             className="form-input"
             value={formData.xempnum}
-            onChange={handleInputChange}
+            onChange={(e) => handleInputChange("xempnum", e.target.value)}
           />
+          {/* Add other input fields */}
         </div>
-      </div>
-
-      {/*------------------------FORM--------------------*/}
-
+    </div>
+    {/* Customer List with Pagination */}
+    <div>
       <table className="detail-list">
         <tr>
           <th>Customer Code</th>
@@ -270,42 +153,35 @@ function Customer() {
           <th>Email</th>
           <th>Sales Person</th>
         </tr>
-        {customers.length > 0 ? (
-            customers.map((customer, index) => (
-              <tr key={index}>
-                <td>{customer.xcus}</td>
-                <td>{customer.xorg}</td>
-                <td>{customer.xadd1}</td>
-                <td>{customer.xphone}</td>
-                <td>{customer.xemail}</td>
-                <td>{customer.xempnum}</td>
-              </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan="6" style={{ textAlign: "center" }}>
-                No Customers Found
-              </td>
-            </tr>
-          )}
+        {customers.map((customer) => (
+          <tr key={customer.xcus} onClick={() => setFormData(customer)}>
+            <td>{customer.xcus}</td>
+            <td>{customer.xorg}</td>
+            <td>{customer.xadd1}</td>
+            <td>{customer.xphone}</td>
+            <td>{customer.xemail}</td>
+            <td>{customer.xempnum}</td>
+          </tr>
+        ))}
       </table>
 
-      <button 
-        className="pagination-btn-lt" 
-        onClick={offsetdec} 
-        style={listoffset === 0 ? { pointerEvents: "none", opacity: 0.5 } : {}}
-          >&lt;
-      </button>
-      <button 
-        className="pagination-btn-gt" 
-        onClick={offsetinc}
-        style={
-          listoffset + 10 >= totalCustomers ? { pointerEvents: "none", opacity: 0.5 } : {} }
-          >&gt;
-      </button>
-
+          <button
+            className="pagination-btn-lt" 
+            onClick={() => setListOffset((prev) => Math.max(prev - 10, 0))}
+            disabled={listoffset === 0}
+          >
+            &lt;
+          </button>
+          <button
+            className="pagination-btn-gt" 
+            onClick={() => setListOffset((prev) => prev + 10)}
+            disabled={listoffset + 10 >= totalCustomers}
+          >
+            &gt;
+          </button>
+      </div>
     </div>
   );
 }
 
-export default Customer;
+export default CustomerManager;
