@@ -63,8 +63,22 @@
   background-color: #CB51DF;
 }
 
-.detail-list{
+.detail-list-header{
   margin-top: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.detail-list-header input{
+  border: 1px solid #cecccc;
+  border-radius: 1px;
+  background-color: white;
+  color: black;
+  padding: 4px;
+}
+
+.detail-list{
   width: 100%;
   border-radius: 1px;
   margin-bottom: 40px;
@@ -81,6 +95,10 @@
 
 .detail-list > tr > td{
   color: #656E6F;
+}
+
+.detail-list tr :hover{
+  cursor: pointer;
 }
 
 .pagination-btn-lt{

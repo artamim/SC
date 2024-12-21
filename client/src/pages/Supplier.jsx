@@ -5,12 +5,12 @@ import { handleApiRequest } from "../utils/basicCrudApiUtils";
 
 function DataManager() {
   const [formData, setFormData] = useState({
-    xcus: "",
+    xsup: "",
     xorg: "",
     xadd1: "",
     xphone: "",
     xemail: "",
-    xempnum: "",
+    xcountry: "",
   });
   const [records, setRecords] = useState([]);
   const [actionmsg, setActionMsg] = useState("");
@@ -19,14 +19,14 @@ function DataManager() {
   const [totalData, settotalData] = useState(0);
   const [searchval, setsearchval] = useState("");
 
-  // Fetch customers with pagination
+  // Fetch suppliers with pagination
   const fetchRecords = () => {
     handleApiRequest({
-      endpoint: "/customer/showall",
+      endpoint: "/supplier/showall",
       method: "GET",
       params: { offset: listoffset },
       onSuccess: (data) => {
-        setRecords(data.customers);
+        setRecords(data.suppliers);
         settotalData(data.total);
       },
       onError: (error) => setActionMsg(`Error: ${error}`),
@@ -44,27 +44,27 @@ function DataManager() {
 
   const handleClear = () => {
     setFormData({
-      xcus: "",
+      xsup: "",
       xorg: "",
       xadd1: "",
       xphone: "",
       xemail: "",
-      xempnum: "",
+      xcountry: "",
     });
     setActionMsg("");
   };
 
-  // Handle customer actions
+  // Handle supplier actions
   const handleAction = (endpoint, method, successMsg) => {
     setIsDisabled(true);
     handleApiRequest({
       endpoint,
       method,
       data: method === "GET" ? {} : formData, // Include `formData` only for non-GET requests
-      params: method === "GET" ? { xcus: formData.xcus } : {}, // Pass xcus in params for GET requests
+      params: method === "GET" ? { xsup: formData.xsup } : {}, // Pass xsup in params for GET requests
       onSuccess: (data) => {
         setActionMsg(successMsg);
-        if (data?.xcus) setFormData((prev) => ({ ...prev, ...data }));
+        if (data?.xsup) setFormData((prev) => ({ ...prev, ...data }));
         fetchRecords();
       },
       onError: (error) => setActionMsg(`Error: ${error}`),
@@ -75,18 +75,18 @@ function DataManager() {
   return (
     <div className="container">
     <h2>
-        <b>Customer Master</b>
+        <b>Supplier Master</b>
     </h2>
     <p style={{ color: actionmsg.includes("Error") ? "red" : "green" }}><b>{actionmsg}</b></p>
 
     <div className="crud-form">
       {/* Action Buttons */}
         <Crudbuttons
-          handleShow={() => handleAction("/customer/show", "GET", "Customer fetched successfully")}
+          handleShow={() => handleAction("/supplier/show", "GET", "Supplier fetched successfully")}
           handleClear={handleClear}
-          handleAdd={() => handleAction("/customer/add", "POST", "Customer added successfully")}
-          handleUpdate={() => handleAction("/customer/update", "PUT", "Customer updated successfully")}
-          handleDelete={() => handleAction("/customer/delete", "DELETE", "Customer deleted successfully")}
+          handleAdd={() => handleAction("/supplier/add", "POST", "Supplier added successfully")}
+          handleUpdate={() => handleAction("/supplier/update", "PUT", "Supplier updated successfully")}
+          handleDelete={() => handleAction("/supplier/delete", "DELETE", "Supplier deleted successfully")}
           isDisabled={isDisabled}
         />
 
@@ -94,14 +94,14 @@ function DataManager() {
         <div className="form-layout-2">
           <input
             type="text"
-            placeholder="Customer Code"
+            placeholder="Supplier Code"
             className="form-input"
-            value={formData.xcus}
-            onChange={(e) => handleInputChange("xcus", e.target.value)}
+            value={formData.xsup}
+            onChange={(e) => handleInputChange("xsup", e.target.value)}
           />
           <input
             type="text"
-            placeholder="Customer Name"
+            placeholder="Supplier Name"
             className="form-input"
             value={formData.xorg}
             onChange={(e) => handleInputChange("xorg", e.target.value)}
@@ -111,14 +111,14 @@ function DataManager() {
         <div className="form-layout-2">
           <input
             type="text"
-            placeholder="Customer Address"
+            placeholder="Supplier Address"
             className="form-input"
             value={formData.xadd1}
             onChange={(e) => handleInputChange("xadd1", e.target.value)}
           />
           <input
             type="tel"
-            placeholder="Customer Phone"
+            placeholder="Supplier Phone"
             className="form-input"
             value={formData.xphone}
             onChange={(e) => handleInputChange("xphone", e.target.value)}
@@ -128,56 +128,60 @@ function DataManager() {
         <div className="form-layout-2">
           <input
             type="email"
-            placeholder="Customer Email"
+            placeholder="Supplier Email"
             className="form-input"
             value={formData.xemail}
             onChange={(e) => handleInputChange("xemail", e.target.value)}
           />
-          <input
+          <select
             type="text"
-            placeholder="Sales Person"
+            placeholder="Country"
             className="form-input"
-            value={formData.xempnum}
-            onChange={(e) => handleInputChange("xempnum", e.target.value)}
-          />
+            value={formData.xcountry}
+            onChange={(e) => handleInputChange("xcountry", e.target.value)}
+          >
+            <option>Bangladesh</option>
+            <option>UK</option>
+            <option>US</option>
+          </select>
           {/* Add other input fields */}
         </div>
     </div>
-    {/* Customer List with Pagination */}
+    {/* Supplier List with Pagination */}
     <div>
     
     <div className="detail-list-header">
-      <h1><nobr>Customer List</nobr></h1>
+      <h1><nobr>Supplier List</nobr></h1>
       <input type="text" placeholder="Search" onChange={(e) => setsearchval(e.target.value)}/>
     </div>
     
       <table className="detail-list">
         <tr>
-          <th>Customer Code</th>
-          <th>Customer Name</th>
-          <th>Customer Address</th>
+          <th>Supplier Code</th>
+          <th>Supplier Name</th>
+          <th>Supplier Address</th>
           <th>Phone</th>
           <th>Email</th>
-          <th>Sales Person</th>
+          <th>Country</th>
         </tr>
         {records
         .filter(
           (data) =>
-            (data.xcus && data.xcus.includes(searchval)) ||
+            (data.xsup && data.xsup.includes(searchval)) ||
             (data.xorg && data.xorg.toLowerCase().includes(searchval.toLowerCase())) ||
             (data.xadd1 && data.xadd1.toLowerCase().includes(searchval.toLowerCase())) ||
             (data.xphone && data.xphone.includes(searchval)) ||
             (data.xemail && data.xemail.includes(searchval)) ||
-            (data.xempnum && data.xempnum.includes(searchval))
+            (data.xcountry && data.xcountry.includes(searchval))
         )
         .map((data) => (
-          <tr key={data.xcus} onClick={() => setFormData(data)}>
-            <td>{data.xcus}</td>
+          <tr key={data.xsup} onClick={() => setFormData(data)}>
+            <td>{data.xsup}</td>
             <td>{data.xorg}</td>
             <td>{data.xadd1}</td>
             <td>{data.xphone}</td>
             <td>{data.xemail}</td>
-            <td>{data.xempnum}</td>
+            <td>{data.xcountry}</td>
           </tr>
         ))}
       </table>

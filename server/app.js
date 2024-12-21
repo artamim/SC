@@ -5,6 +5,7 @@ const loginHandler = require("./controllers/login");
 const userHandler = require("./controllers/user");
 const signoutHandler = require("./controllers/signout");
 const customerRoutes = require("./routes/customerRoute");
+const supplierRoutes = require("./routes/supplierRoute");
 require("dotenv").config();
 
 const app = express();
@@ -19,6 +20,7 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 app.use("/customer", customerRoutes);
+app.use("/supplier", supplierRoutes);
 
 app.post("/login", loginHandler);
 app.get("/user", userHandler);
