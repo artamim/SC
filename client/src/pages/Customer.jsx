@@ -10,7 +10,7 @@ function DataManager() {
     xadd1: "",
     xphone: "",
     xemail: "",
-    xempnum: "",
+    xsup: "",
   });
   const [records, setRecords] = useState([]);
   const [actionmsg, setActionMsg] = useState("");
@@ -49,7 +49,7 @@ function DataManager() {
       xadd1: "",
       xphone: "",
       xemail: "",
-      xempnum: "",
+      xsup: "",
     });
     setActionMsg("");
   };
@@ -137,8 +137,8 @@ function DataManager() {
             type="text"
             placeholder="Sales Person"
             className="form-input"
-            value={formData.xempnum}
-            onChange={(e) => handleInputChange("xempnum", e.target.value)}
+            value={formData.xsup}
+            onChange={(e) => handleInputChange("xsup", e.target.value)}
           />
           {/* Add other input fields */}
         </div>
@@ -168,7 +168,7 @@ function DataManager() {
             (data.xadd1 && data.xadd1.toLowerCase().includes(searchval.toLowerCase())) ||
             (data.xphone && data.xphone.includes(searchval)) ||
             (data.xemail && data.xemail.includes(searchval)) ||
-            (data.xempnum && data.xempnum.includes(searchval))
+            (data.xsup && data.xsup.includes(searchval))
         )
         .map((data) => (
           <tr key={data.xcus} onClick={() => setFormData(data)}>
@@ -177,7 +177,7 @@ function DataManager() {
             <td>{data.xadd1}</td>
             <td>{data.xphone}</td>
             <td>{data.xemail}</td>
-            <td>{data.xempnum}</td>
+            <td>{data.xsup}</td>
           </tr>
         ))}
       </table>

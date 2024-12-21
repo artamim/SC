@@ -5,7 +5,7 @@ app.use(express.json());
 
 // Add a customer
 exports.addCustomer = async (req, res) => {
-  const { xorg, xadd1, xphone, xemail, xempnum } = req.body;
+  const { xorg, xadd1, xphone, xemail, xsup } = req.body;
 
   try {
     // Generate `xcus`
@@ -19,8 +19,8 @@ exports.addCustomer = async (req, res) => {
 
     // Insert into DB
     await pool.query(
-      `INSERT INTO cacus (xcus, xorg, xadd1, xphone, xemail, xempnum) VALUES ($1, $2, $3, $4, $5, $6)`,
-      [nextXcus, xorg, xadd1, xphone, xemail, xempnum]
+      `INSERT INTO cacus (xcus, xorg, xadd1, xphone, xemail, xsup) VALUES ($1, $2, $3, $4, $5, $6)`,
+      [nextXcus, xorg, xadd1, xphone, xemail, xsup]
     );
 
     res.status(201).json({ message: "Customer created successfully", xcus: nextXcus });
@@ -49,12 +49,12 @@ exports.showCustomer = async (req, res) => {
 
 // Update a customer
 exports.updateCustomer = async (req, res) => {
-  const { xcus, xorg, xadd1, xphone, xemail, xempnum } = req.body;
+  const { xcus, xorg, xadd1, xphone, xemail, xsup } = req.body;
 
   try {
     await pool.query(
-      `UPDATE cacus SET xorg = $1, xadd1 = $2, xphone = $3, xemail = $4, xempnum = $5 WHERE xcus = $6`,
-      [xorg, xadd1, xphone, xemail, xempnum, xcus]
+      `UPDATE cacus SET xorg = $1, xadd1 = $2, xphone = $3, xemail = $4, xsup = $5 WHERE xcus = $6`,
+      [xorg, xadd1, xphone, xemail, xsup, xcus]
     );
 
     res.status(200).json({ message: "Customer updated successfully" });
@@ -81,7 +81,7 @@ exports.deleteCustomer = async (req, res) => {
 exports.showallCustomers = async (req, res) => {
   const { offset } = req.query;
   try {
-    const customersResult = await pool.query(`SELECT * FROM cacus limit 10 offset $1`, [offset]);
+    const customersResult = await pool.query(`SELECT * FROM cacus order by xcus limit 10 offset $1`, [offset]);
     const countResult = await pool.query(`SELECT COUNT(*) AS total FROM cacus`);
     const total = parseInt(countResult.rows[0].total, 10);
     if (customersResult.rows.length > 0) {

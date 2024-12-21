@@ -133,21 +133,15 @@ function DataManager() {
             value={formData.xemail}
             onChange={(e) => handleInputChange("xemail", e.target.value)}
           />
-          <select
-            type="text"
-            placeholder="Country"
+          <input
+            type="email"
+            placeholder="Supplier Email"
             className="form-input"
             value={formData.xcountry}
             onChange={(e) => handleInputChange("xcountry", e.target.value)}
-          >
-            <option>Bangladesh</option>
-            <option>UK</option>
-            <option>US</option>
-          </select>
-          {/* Add other input fields */}
+          />
         </div>
     </div>
-    {/* Supplier List with Pagination */}
     <div>
     
     <div className="detail-list-header">
