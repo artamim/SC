@@ -54,9 +54,10 @@ export default function RootLayout() {
                         <div className="channel">Cross Application</div>
                         <NavLink to="customer" className="route">Customer Master</NavLink>
                         <NavLink to="supplier" className="route">Supplier Master</NavLink>
+                        <NavLink to="item" className="route">Item Master</NavLink>
                         <div className="devider"></div>
                         <div className="channel">Sales</div>
-                        <NavLink to="sales" className="route">Sales Order</NavLink>
+                        <NavLink to="salesorder" className="route">Sales Order</NavLink>
                         <NavLink to="collection" className="route">Collection</NavLink>
                     </div>
                     {/*<NavLink to="signout" className="signout">{user.id}</NavLink>*/}

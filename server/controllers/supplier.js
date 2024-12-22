@@ -78,7 +78,7 @@ exports.deleteSupplier = async (req, res) => {
 };
 
 // Show all supplier
-exports.showallSuppliers = async (req, res) => {
+exports.showAllSuppliers = async (req, res) => {
   const { offset } = req.query;
   try {
     const suppliersResult = await pool.query(`SELECT * FROM casup limit 10 offset $1`, [offset]);

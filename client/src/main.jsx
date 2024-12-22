@@ -9,6 +9,8 @@ import Landing from './pages/Landing.jsx'
 import {Login, action as loginAction} from './pages/Login.jsx'
 import CustomerManager from './pages/Customer.jsx'
 import SupplierManager from './pages/Supplier.jsx'
+import ItemManager from './pages/Item.jsx'
+import SalesOrderManager from './pages/SalesOrder.jsx'
 import Signout from './pages/Signout.jsx'
 import Dashboard from './pages/Dashboard.jsx'
 import About from './pages/About.jsx'
@@ -29,6 +31,8 @@ const router = createBrowserRouter(
           <Route path="about" element={<About />} />
           <Route path="customer" element={<CustomerManager />} />
           <Route path="supplier" element={<SupplierManager />} />
+          <Route path="item" element={<ItemManager />} />
+          <Route path="salesorder" element={<SalesOrderManager />} />
         </Route>
       </Route>
       <Route path="*" element={<PathNotFound />} />

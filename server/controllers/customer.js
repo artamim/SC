@@ -78,7 +78,7 @@ exports.deleteCustomer = async (req, res) => {
 };
 
 // Show all customer
-exports.showallCustomers = async (req, res) => {
+exports.showAllCustomers = async (req, res) => {
   const { offset } = req.query;
   try {
     const customersResult = await pool.query(`SELECT * FROM cacus order by xcus limit 10 offset $1`, [offset]);
