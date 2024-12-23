@@ -99,19 +99,20 @@ function DataManager() {
   return (
     <div className="container">
     <h2>
-        <b>SalesOrder Master</b>
+        <b>Sales Order</b>
     </h2>
     <p style={{ color: actionmsg.includes("Error") ? "red" : "green" }}><b>{actionmsg}</b></p>
     
     {formData.xstatus != "" ? 
       <div style={{display: "flex"}}>
         <NavLink 
-        to={{
-          pathname: "details",
-          state: { xordernum: formData.xordernum },
-        }}
-        className="route" 
-        style={{display: "inline-block", textDecoration: "underline", fontSize: "16px"}}>Order Details</NavLink>
+          to={`detail?${formData.xordernum}`}
+          className="route" 
+          style={{ display: "inline-block", textDecoration: "underline", fontSize: "16px" }}
+        >
+          Order Details
+        </NavLink>
+
       </div> 
     : "" }
     

@@ -11,7 +11,7 @@ import CustomerManager from './pages/Customer.jsx'
 import SupplierManager from './pages/Supplier.jsx'
 import ItemManager from './pages/Item.jsx'
 import SalesOrderManager from './pages/SalesOrder.jsx'
-//import SalesDetailManager from './pages/SalesDetail.jsx'
+import SalesDetailManager from './pages/SalesDetail.jsx'
 import Signout from './pages/Signout.jsx'
 import Dashboard from './pages/Dashboard.jsx'
 import About from './pages/About.jsx'
@@ -33,9 +33,8 @@ const router = createBrowserRouter(
           <Route path="customer" element={<CustomerManager />} />
           <Route path="supplier" element={<SupplierManager />} />
           <Route path="item" element={<ItemManager />} />
-          <Route path="salesorder" element={<SalesOrderManager />} >
-            {/*<Route path="detail" element={<SalesDetailManager />} />*/}
-          </Route>
+          <Route path="salesorder" element={<SalesOrderManager />} />
+          <Route path="salesorder/detail/:xordernum" element={<SalesDetailManager />} />
         </Route>
       </Route>
       <Route path="*" element={<PathNotFound />} />

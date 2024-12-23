@@ -1,13 +1,19 @@
 import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import "../styles/Customer.css";
 import Crudbuttons from "../layouts/Crudbuttons";
 import { handleApiRequest } from "../utils/basicCrudApiUtils";
 
 function DataManager() {
+
+  const location = useLocation();
+  const { xordernum } = location.state || {};
+  console.log(xordernum)
   const [formData, setFormData] = useState({
+    xordernum: xordernum,
     xitem: "",
-    xcat: "",
-    xdesc: "",
+    xqty: 0,
+    xtotamt: 0.00,
   });
   const [records, setRecords] = useState([]);
   const [actionmsg, setActionMsg] = useState("");
@@ -19,12 +25,13 @@ function DataManager() {
   // Fetch items with pagination
   const fetchRecords = () => {
     handleApiRequest({
-      endpoint: "/item/showall",
+      endpoint: "/salesorder/detail/showall",
       method: "GET",
       params: { offset: listoffset },
       onSuccess: (data) => {
-        setRecords(data.items);
+        setRecords(data.salesDetails);
         settotalData(data.total);
+        
       },
       onError: (error) => setActionMsg(`Error: ${error}`),
     });
@@ -42,8 +49,8 @@ function DataManager() {
   const handleClear = () => {
     setFormData({
       xitem: "",
-      xcat: "",
-      xdesc: "",
+      xqty: 0,
+      xtotamt: 0.00,
     });
     setActionMsg("");
   };
@@ -69,18 +76,18 @@ function DataManager() {
   return (
     <div className="container">
     <h2>
-        <b>Item Master</b>
+        <b>Sales Detail</b>
     </h2>
     <p style={{ color: actionmsg.includes("Error") ? "red" : "green" }}><b>{actionmsg}</b></p>
 
     <div className="crud-form">
       {/* Action Buttons */}
         <Crudbuttons
-          handleShow={() => handleAction("/item/show", "GET", "Item fetched successfully")}
+          handleShow={() => handleAction("/salesorder/detail/show", "GET", "Order Detail fetched successfully")}
           handleClear={handleClear}
-          handleAdd={() => handleAction("/item/add", "POST", "Item added successfully")}
-          handleUpdate={() => handleAction("/item/update", "PUT", "Item updated successfully")}
-          handleDelete={() => handleAction("/item/delete", "DELETE", "Item deleted successfully")}
+          handleAdd={() => handleAction("/salesorder/detail/add", "POST", "Order Detail added successfully")}
+          handleUpdate={() => handleAction("/salesorder/detail/update", "PUT", "Order Detail updated successfully")}
+          handleDelete={() => handleAction("/salesorder/detail/delete", "DELETE", "Order Detail deleted successfully")}
           isDisabled={isDisabled}
         />
 
@@ -95,20 +102,22 @@ function DataManager() {
           />
           <input
             type="text"
-            placeholder="Item Catagory"
+            placeholder="Item Quantity"
             className="form-input"
-            value={formData.xcat}
-            onChange={(e) => handleInputChange("xcat", e.target.value)}
+            value={formData.xqty}
+            onChange={(e) => handleInputChange("xqty", e.target.value)}
           />
         </div>
 
         <div className="form-layout-1">
           <input
             type="text"
-            placeholder="Item Description"
+            placeholder="Total Amount"
             className="form-input"
-            value={formData.xdesc}
-            onChange={(e) => handleInputChange("xdesc", e.target.value)}
+            value={formData.xtotamt}
+            onChange={(e) => handleInputChange("xtotamt", e.target.value)}
+            readOnly={true}
+            style={{ opacity: .8 }}
           />
         </div>
 
@@ -116,28 +125,26 @@ function DataManager() {
     <div>
     
     <div className="detail-list-header">
-      <h1><nobr>Item List</nobr></h1>
+      <h1><nobr>Sales Detail of {xordernum}</nobr></h1>
       <input type="text" placeholder="Search" onChange={(e) => setsearchval(e.target.value)}/>
     </div>
     
       <table className="detail-list">
         <tr>
           <th>Item Code</th>
-          <th>Item Catagory</th>
-          <th>Item Description</th>
+          <th>Qty</th>
+          <th>Total Amount</th>
         </tr>
         {records
         .filter(
           (data) =>
-            (data.xitem && data.xitem.includes(searchval)) ||
-            (data.xcat && data.xcat.toLowerCase().includes(searchval.toLowerCase())) ||
-            (data.xdesc && data.xdesc.toLowerCase().includes(searchval.toLowerCase()))
+            (data.xitem && data.xitem.includes(searchval))
         )
         .map((data) => (
           <tr key={data.xitem} onClick={() => setFormData(data)}>
             <td>{data.xitem}</td>
-            <td>{data.xcat}</td>
-            <td>{data.xdesc}</td>
+            <td>{data.xqty}</td>
+            <td>{data.xtotamt}</td>
           </tr>
         ))}
       </table>

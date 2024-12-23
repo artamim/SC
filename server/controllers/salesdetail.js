@@ -79,7 +79,7 @@ exports.showAllSalesDetails = async (req, res) => {
 
     if (ordersResult.rows.length > 0) {
       res.status(200).json({
-        salesOrders: ordersResult.rows,
+        salesDetails: ordersResult.rows,
         total,
       });
     } else {
