@@ -1,13 +1,15 @@
 import { useState, useEffect } from "react";
 import "../styles/Customer.css";
+import { NavLink} from 'react-router-dom';
 import Crudbuttons from "../layouts/Crudbuttons";
 import { handleApiRequest } from "../utils/basicCrudApiUtils";
 
 function DataManager() {
   const [formData, setFormData] = useState({
-    xsalesorder: "",
-    xcat: "",
-    xdesc: "",
+    xordernum: "",
+    xcus: "",
+    xdate: "",
+    xstatus: "",
   });
   const [records, setRecords] = useState([]);
   const [actionmsg, setActionMsg] = useState("");
@@ -23,7 +25,7 @@ function DataManager() {
       method: "GET",
       params: { offset: listoffset },
       onSuccess: (data) => {
-        setRecords(data.salesorders);
+        setRecords(data.salesOrders);
         settotalData(data.total);
       },
       onError: (error) => setActionMsg(`Error: ${error}`),
@@ -41,9 +43,10 @@ function DataManager() {
 
   const handleClear = () => {
     setFormData({
-      xsalesorder: "",
-      xcat: "",
-      xdesc: "",
+      xordernum: "",
+      xcus: "",
+      xdate: "",
+      xstatus: "",
     });
     setActionMsg("");
   };
@@ -54,11 +57,11 @@ function DataManager() {
     handleApiRequest({
       endpoint,
       method,
-      data: method === "GET" ? {} : formData, // Include `formData` only for non-GET requests
-      params: method === "GET" ? { xsalesorder: formData.xsalesorder } : {}, // Pass xsalesorder in params for GET requests
+      data: method === "GET" ? {} : formData,
+      params: method === "GET" ? { xordernum: formData.xordernum } : {},
       onSuccess: (data) => {
         setActionMsg(successMsg);
-        if (data?.xsalesorder) setFormData((prev) => ({ ...prev, ...data }));
+        if (data?.xordernum) setFormData((prev) => ({ ...prev, ...data }));
         fetchRecords();
       },
       onError: (error) => setActionMsg(`Error: ${error}`),
@@ -66,12 +69,78 @@ function DataManager() {
     setTimeout(() => setIsDisabled(false), 1000);
   };
 
+  function orderCancel(){
+    handleApiRequest({
+      endpoint: "/salesorder/cancel",
+      method: "PATCH",
+      params: { xordernum: formData.xordernum },
+      onSuccess: (data) => {
+        setFormData((prev) => ({ ...prev, xstatus: data.xstatus }));
+        fetchRecords();
+      },
+      onError: (error) => setActionMsg(`Error: ${error}`)
+    })
+  }
+
+  function orderComplete() {
+    handleApiRequest({
+      endpoint: "/salesorder/complete",
+      method: "PATCH",
+      params: { xordernum: formData.xordernum },
+      onSuccess: (data) => {
+        setFormData((prev) => ({ ...prev, xstatus: data.xstatus }));
+        fetchRecords();
+      },
+      onError: (error) => setActionMsg(`Error: ${error}`)
+    });
+  }
+  
+
   return (
     <div className="container">
     <h2>
         <b>SalesOrder Master</b>
     </h2>
     <p style={{ color: actionmsg.includes("Error") ? "red" : "green" }}><b>{actionmsg}</b></p>
+    
+    {formData.xstatus != "" ? 
+      <div style={{display: "flex"}}>
+        <NavLink 
+        to={{
+          pathname: "details",
+          state: { xordernum: formData.xordernum },
+        }}
+        className="route" 
+        style={{display: "inline-block", textDecoration: "underline", fontSize: "16px"}}>Order Details</NavLink>
+      </div> 
+    : "" }
+    
+
+    {formData.xstatus === "Pending" ? 
+      
+      <div style={{ display: "flex", gap: "10px", padding: "10px", paddingLeft: "0px" }}>
+        <button
+          className="btn-complete"
+          type="button"
+          disabled={isDisabled}
+          onClick={orderComplete}
+        >
+          Complete
+        </button>
+
+        <button
+          className="btn-close1"
+          type="button"
+          disabled={isDisabled}
+          onClick={orderCancel}
+        >
+          Close
+        </button>
+      </div> 
+
+    : ""}
+    
+    
 
     <div className="crud-form">
       {/* Action Buttons */}
@@ -95,10 +164,31 @@ function DataManager() {
           />
           <input
             type="text"
-            placeholder="SalesOrder Catagory"
+            placeholder="Customer"
             className="form-input"
             value={formData.xcus}
             onChange={(e) => handleInputChange("xcus", e.target.value)}
+          />
+        </div>
+
+        <div className="form-layout-2">
+          <input
+            type="text"
+            placeholder="Date Created"
+            className="form-input"
+            value={formData.xdate}
+            onChange={(e) => handleInputChange("xdate", e.target.value)}
+            readOnly={true}
+            style={{ opacity: .8 }}
+          />
+          <input
+            type="text"
+            placeholder="Status"
+            className="form-input"
+            value={formData.xstatus}
+            onChange={(e) => handleInputChange("xstatus", e.target.value)}
+            readOnly={true}
+            style={{ opacity: .8 }}
           />
         </div>
 
@@ -118,14 +208,13 @@ function DataManager() {
           <th>Date</th>
           <th>Status</th>
         </tr>
-        {records
-        .filter(
+        {records.filter(
           (data) =>
             (data.xordernum && data.xordernum.includes(searchval)) ||
             (data.xcus && data.xcus.includes(searchval)) ||
             (data.xorg && data.xorg.toLowerCase().includes(searchval.toLowerCase())) ||
             (data.xdate && data.xdate.includes(searchval)) ||
-            (data.xdesc && data.xdesc.toLowerCase().includes(searchval.toLowerCase()))
+            (data.xstatus && data.xstatus.toLowerCase().includes(searchval.toLowerCase()))
         )
         .map((data) => (
           <tr key={data.xordernum} onClick={() => setFormData(data)}>
@@ -133,7 +222,7 @@ function DataManager() {
             <td>{data.xcus}</td>
             <td>{data.xorg}</td>
             <td>{data.xdate}</td>
-            <td>{data.xdesc}</td>
+            <td>{data.xstatus}</td>
           </tr>
         ))}
       </table>

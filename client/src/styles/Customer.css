@@ -116,3 +116,23 @@
   border-radius: 10px;
   margin-left: 10px;
 }
+
+.btn-complete{
+  background-color: #355F2E;
+  color: white;
+  border: none;
+}
+
+.btn-complete:hover{
+  background-color: #45753c;
+}
+
+.btn-close1{
+  background-color: #640D5F;
+  color: white;
+  border: none;
+}
+
+.btn-close1:hover{
+  background-color: #961a90;
+}

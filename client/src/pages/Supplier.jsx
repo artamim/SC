@@ -158,8 +158,7 @@ function DataManager() {
           <th>Email</th>
           <th>Country</th>
         </tr>
-        {records
-        .filter(
+        {records.filter(
           (data) =>
             (data.xsup && data.xsup.includes(searchval)) ||
             (data.xorg && data.xorg.toLowerCase().includes(searchval.toLowerCase())) ||

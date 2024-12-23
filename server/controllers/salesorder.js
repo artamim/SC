@@ -5,7 +5,8 @@ app.use(express.json());
 
 // Add a sales order
 exports.addSalesOrder = async (req, res) => {
-  const { xcus, xdate, xstatus } = req.body;
+  const { xcus } = req.body;
+  const xstatus = "Pending"
 
   try {
     // Generate `xordernum`
@@ -19,8 +20,8 @@ exports.addSalesOrder = async (req, res) => {
 
     // Insert into opord table
     await pool.query(
-      `INSERT INTO opord (xordernum, xcus, xdate, xstatus) VALUES ($1, $2, $3, $4)`,
-      [nextXordernum, xcus, xdate, xstatus]
+      `INSERT INTO opord (xordernum, xcus, xstatus) VALUES ($1, $2, $3)`,
+      [nextXordernum, xcus, xstatus]
     );
 
     res.status(201).json({ message: "Sales order created successfully", xordernum: nextXordernum });
@@ -81,7 +82,7 @@ exports.showAllSalesOrders = async (req, res) => {
   const { offset } = req.query;
 
   try {
-    const ordersResult = await pool.query(`SELECT opord.*, cacus.xorg FROM opord inner join cacus using(xcus) LIMIT 10 OFFSET $1`, [offset]);
+    const ordersResult = await pool.query(`SELECT opord.*, cacus.xorg FROM opord inner join cacus using(xcus) order by xordernum LIMIT 10 OFFSET $1`, [offset]);
     const countResult = await pool.query(`SELECT COUNT(*) AS total FROM opord`);
     const total = parseInt(countResult.rows[0].total, 10);
 
@@ -98,3 +99,28 @@ exports.showAllSalesOrders = async (req, res) => {
     res.status(500).json({ error: "Failed to fetch sales orders" });
   }
 };
+
+exports.cancelSalesOrder = async (req, res) => {
+  const { xordernum } = req.query;
+
+  try {
+    await pool.query(`UPDATE opord SET xstatus = 'Cancelled' WHERE xordernum = $1`, [xordernum]);
+    res.status(200).json({ message: "Sales order cancelled", xstatus: 'Cancelled' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to cancel sales order" });
+  }
+};
+
+exports.completeSalesOrder = async (req, res) => {
+  const { xordernum } = req.query;
+
+  try {
+    await pool.query(`UPDATE opord SET xstatus = 'Completed' WHERE xordernum = $1`, [xordernum]);
+    res.status(200).json({ message: "Sales order completed", xstatus: 'Completed' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to complete sales order" });
+  }
+};
+
