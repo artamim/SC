@@ -1,10 +1,26 @@
 import { useState, useEffect } from "react";
 import "../styles/Customer.css";
-import { NavLink} from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import Crudbuttons from "../layouts/Crudbuttons";
 import { handleApiRequest } from "../utils/basicCrudApiUtils";
 
 function DataManager() {
+
+  //Retaining Previous Data After Traversing To OrderDetail
+  const location = useLocation();
+  const { state } = location || {};
+  const returnedFormData = state?.prevFormData || {};
+
+  useEffect(() => {
+      if (Object.keys(returnedFormData).length > 0) {
+          setFormData((prevData) => ({
+              ...prevData,
+              ...returnedFormData,
+          }));
+      }
+  }, [returnedFormData]);
+  //[Retaining Previous Data After Traversing To OrderDetail] End
+
   const [formData, setFormData] = useState({
     xordernum: "",
     xcus: "",
@@ -103,18 +119,18 @@ function DataManager() {
     </h2>
     <p style={{ color: actionmsg.includes("Error") ? "red" : "green" }}><b>{actionmsg}</b></p>
     
-    {formData.xstatus != "" ? 
-      <div style={{display: "flex"}}>
+    {formData.xstatus !== "" ? 
+      <div style={{ display: "flex" }}>
         <NavLink 
-          to={`detail?${formData.xordernum}`}
+          to={`detail/${formData.xordernum}`}
+          state={{ formData }} // Pass formData as state
           className="route" 
           style={{ display: "inline-block", textDecoration: "underline", fontSize: "16px" }}
         >
           Order Details
         </NavLink>
-
       </div> 
-    : "" }
+    : ""}
     
 
     {formData.xstatus === "Pending" ? 
@@ -197,7 +213,7 @@ function DataManager() {
     <div>
     
     <div className="detail-list-header">
-      <h1><nobr>SalesOrder List</nobr></h1>
+      <h2><nobr>Sales Order List</nobr></h2>
       <input type="text" placeholder="Search" onChange={(e) => setsearchval(e.target.value)}/>
     </div>
     
@@ -223,7 +239,13 @@ function DataManager() {
             <td>{data.xcus}</td>
             <td>{data.xorg}</td>
             <td>{data.xdate}</td>
-            <td>{data.xstatus}</td>
+            <td
+              style={{
+                color: data.xstatus === "Completed" ? "green" : data.xstatus === "Cancelled" ? "red" : "inherit",
+              }}
+            >
+              {data.xstatus}
+            </td>
           </tr>
         ))}
       </table>

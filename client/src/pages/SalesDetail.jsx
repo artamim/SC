@@ -1,20 +1,45 @@
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useParams, useLocation  } from "react-router-dom";
+import { NavLink} from 'react-router-dom';
 import "../styles/Customer.css";
 import Crudbuttons from "../layouts/Crudbuttons";
 import { handleApiRequest } from "../utils/basicCrudApiUtils";
 
 function DataManager() {
 
+  //Capturing Header Data
   const location = useLocation();
-  const { xordernum } = location.state || {};
-  console.log(xordernum)
+  const { state } = location || {};
+  const previousFormData = state?.formData || {};
+
+  const [prevFormData, setPrevFormData] = useState({
+    xordernum: "",
+    xcus: "",
+    xdate: "",
+    xstatus: "",
+  });
+
+  useEffect(() => {
+    if (Object.keys(previousFormData).length > 0) {
+      setPrevFormData((prevData) => ({
+            ...prevData,
+            ...previousFormData,
+        }));
+    }
+  }, [previousFormData]);
+
+  //[Capturing Header Data] End
+
+  const param = useParams();
+  const { xordernum } = param;
+
   const [formData, setFormData] = useState({
     xordernum: xordernum,
     xitem: "",
     xqty: 0,
     xtotamt: 0.00,
   });
+  
   const [records, setRecords] = useState([]);
   const [actionmsg, setActionMsg] = useState("");
   const [isDisabled, setIsDisabled] = useState(false);
@@ -27,7 +52,7 @@ function DataManager() {
     handleApiRequest({
       endpoint: "/salesorder/detail/showall",
       method: "GET",
-      params: { offset: listoffset },
+      params: { offset: listoffset, xordernum: xordernum },
       onSuccess: (data) => {
         setRecords(data.salesDetails);
         settotalData(data.total);
@@ -65,7 +90,12 @@ function DataManager() {
       params: method === "GET" ? { xitem: formData.xitem } : {}, // Pass xitem in params for GET requests
       onSuccess: (data) => {
         setActionMsg(successMsg);
-        if (data?.xitem) setFormData((prev) => ({ ...prev, ...data }));
+        if (data?.xtotamt !== undefined) {
+          setFormData((prev) => ({
+            ...prev,
+            xtotamt: data.xtotamt,
+          }));
+        }
         fetchRecords();
       },
       onError: (error) => setActionMsg(`Error: ${error}`),
@@ -79,6 +109,18 @@ function DataManager() {
         <b>Sales Detail</b>
     </h2>
     <p style={{ color: actionmsg.includes("Error") ? "red" : "green" }}><b>{actionmsg}</b></p>
+
+    <div style={{display: "flex"}}>
+      <NavLink 
+        to="/home/salesorder"
+        state={{ prevFormData }}
+        className="route" 
+        style={{ display: "inline-block", textDecoration: "underline", fontSize: "16px" }}
+      >
+        Return
+    </NavLink>
+
+    </div>
 
     <div className="crud-form">
       {/* Action Buttons */}
@@ -125,14 +167,16 @@ function DataManager() {
     <div>
     
     <div className="detail-list-header">
-      <h1><nobr>Sales Detail of {xordernum}</nobr></h1>
+      <h2><nobr>Sales Detail of {xordernum}</nobr></h2>
       <input type="text" placeholder="Search" onChange={(e) => setsearchval(e.target.value)}/>
     </div>
     
       <table className="detail-list">
         <tr>
           <th>Item Code</th>
+          <th>Item Name</th>
           <th>Qty</th>
+          <th>Rate</th>
           <th>Total Amount</th>
         </tr>
         {records
@@ -143,7 +187,9 @@ function DataManager() {
         .map((data) => (
           <tr key={data.xitem} onClick={() => setFormData(data)}>
             <td>{data.xitem}</td>
+            <td>{data.xdesc}</td>
             <td>{data.xqty}</td>
+            <td>{data.xrate}</td>
             <td>{data.xtotamt}</td>
           </tr>
         ))}

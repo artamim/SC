@@ -9,9 +9,9 @@ exports.addSalesDetail = async (req, res) => {
 
   try {
 
-    // Insert into opord table
+    // Insert into opodt table
     await pool.query(
-      `INSERT INTO opodt (xordernum, xitem, xqty, xtotamt) VALUES ($1, $2, $3, ($3 * (select xrate from caitem where xitem=$2)))`,
+      `INSERT INTO opodt (xordernum, xitem, xqty, xtotamt) VALUES ($1, $2::varchar, $3::int, ($3 * (select xrate from caitem where xitem=$2)))`,
       [xordernum, xitem, xqty]
     );
 
@@ -22,7 +22,7 @@ exports.addSalesDetail = async (req, res) => {
   }
 };
 
-// Show a sales order
+// Show a sales detail
 exports.showSalesDetail = async (req, res) => {
   const { xordernum, xitem } = req.query;
 
@@ -39,25 +39,42 @@ exports.showSalesDetail = async (req, res) => {
   }
 };
 
-// Update a sales order
+
 exports.updateSalesDetail = async (req, res) => {
-  const { xordernum, xcus, xdate, xstatus } = req.body;
+  const { xitem, xqty, xordernum } = req.body;
 
   try {
-    await pool.query(
-      `UPDATE opodt SET xitem = $1, xqty = $2, xtotamt = ($2 * (select xrate from caitem where xitem=$1)) WHERE xordernum = $3`,
-      [xitem, xqty, xordernum]
+    // Query to update sales detail and return the updated total amount
+    const result = await pool.query(
+      `
+      UPDATE opodt 
+      SET xqty = $1::int, xtotamt = ($1 * (SELECT xrate FROM caitem WHERE xitem = $3::varchar))
+      WHERE xordernum = $2 AND xitem = $3::varchar
+      RETURNING xtotamt
+      `,
+      [xqty, xordernum, xitem]
     );
-    res.status(200).json({ message: "Sales detail updated successfully" });
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ error: "Sales detail not found or no changes made" });
+    }
+
+    const { xtotamt } = result.rows[0];
+
+    res.status(200).json({
+      message: "Sales detail updated successfully",
+      xtotamt,
+    });
   } catch (error) {
-    console.error(error);
+    console.error("Error updating sales detail:", error.message);
     res.status(500).json({ error: "Failed to update sales detail" });
   }
 };
 
+
 // Delete a sales order
 exports.deleteSalesDetail = async (req, res) => {
-  const { xordernum } = req.body;
+  const { xordernum, xitem } = req.body;
 
   try {
     await pool.query(`DELETE FROM opodt WHERE xordernum = $1 and xitem = $2`, [xordernum, xitem]);
@@ -70,10 +87,10 @@ exports.deleteSalesDetail = async (req, res) => {
 
 // Show all sales orders
 exports.showAllSalesDetails = async (req, res) => {
-  const { offset } = req.query;
+  const { xordernum, offset } = req.query;
 
   try {
-    const ordersResult = await pool.query(`SELECT * FROM opodt order by xitem LIMIT 10 OFFSET $1`, [offset]);
+    const ordersResult = await pool.query(`SELECT opodt.*, caitem.xrate, caitem.xdesc FROM opodt inner join caitem using(xitem) where xordernum = $1 order by xitem LIMIT 10 OFFSET $2`, [xordernum, offset]);
     const countResult = await pool.query(`SELECT COUNT(*) AS total FROM opodt`);
     const total = parseInt(countResult.rows[0].total, 10);
 

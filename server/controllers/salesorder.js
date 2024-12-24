@@ -19,12 +19,16 @@ exports.addSalesOrder = async (req, res) => {
     }
 
     // Insert into opord table
-    await pool.query(
-      `INSERT INTO opord (xordernum, xcus, xstatus) VALUES ($1, $2, $3)`,
+    const insertResult = await pool.query(
+      `INSERT INTO opord (xordernum, xcus, xstatus, xdate) 
+       VALUES ($1, $2, $3, CURRENT_DATE) 
+       RETURNING xdate`,
       [nextXordernum, xcus, xstatus]
     );
 
-    res.status(201).json({ message: "Sales order created successfully", xordernum: nextXordernum });
+    const xdate = insertResult.rows[0].xdate;
+
+    res.status(201).json({ message: "Sales order created successfully", xordernum: nextXordernum, xstatus, xdate });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to add sales order" });
@@ -116,6 +120,12 @@ exports.completeSalesOrder = async (req, res) => {
   const { xordernum } = req.query;
 
   try {
+    const itmcount = await pool.query(`select xitem cnt from opodt where xordernum = $1`, [xordernum]);
+    console.log(itmcount.rows.length)
+    if (itmcount.rows.length === 0){
+      res.status(400).json({ error: "Add items first" });
+      return
+    }
     await pool.query(`UPDATE opord SET xstatus = 'Completed' WHERE xordernum = $1`, [xordernum]);
     res.status(200).json({ message: "Sales order completed", xstatus: 'Completed' });
   } catch (error) {
