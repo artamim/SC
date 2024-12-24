@@ -1,31 +1,17 @@
 import { useState, useEffect } from "react";
 import "../styles/Customer.css";
-import { NavLink, useLocation } from 'react-router-dom';
 import Crudbuttons from "../layouts/Crudbuttons";
 import { handleApiRequest } from "../utils/basicCrudApiUtils";
 
 function DataManager() {
 
-  //Retaining Previous Data After Traversing To OrderDetail
-  const location = useLocation();
-  const { state } = location || {};
-  const returnedFormData = state?.prevFormData || {};
-
-  useEffect(() => {
-      if (Object.keys(returnedFormData).length > 0) {
-          setFormData((prevData) => ({
-              ...prevData,
-              ...returnedFormData,
-          }));
-      }
-  }, [returnedFormData]);
-  //[Retaining Previous Data After Traversing To OrderDetail] End
-
   const [formData, setFormData] = useState({
+    xrecnum: "",
     xordernum: "",
     xcus: "",
     xdate: "",
     xstatus: "",
+    xamount: 0.00,
   });
   const [records, setRecords] = useState([]);
   const [actionmsg, setActionMsg] = useState("");
@@ -34,10 +20,10 @@ function DataManager() {
   const [totalData, settotalData] = useState(0);
   const [searchval, setsearchval] = useState("");
 
-  // Fetch salesorders with pagination
+  // Fetch collections with pagination
   const fetchRecords = () => {
     handleApiRequest({
-      endpoint: "/salesorder/showall",
+      endpoint: "/collection/showall",
       method: "GET",
       params: { offset: listoffset },
       onSuccess: (data) => {
@@ -59,25 +45,27 @@ function DataManager() {
 
   const handleClear = () => {
     setFormData({
+      xrecnum: "",
       xordernum: "",
       xcus: "",
       xdate: "",
       xstatus: "",
+      xamount: 0.00,
     });
     setActionMsg("");
   };
 
-  // Handle salesorder actions
+  // Handle collection actions
   const handleAction = (endpoint, method, successMsg) => {
     setIsDisabled(true);
     handleApiRequest({
       endpoint,
       method,
       data: method === "GET" ? {} : formData,
-      params: method === "GET" ? { xordernum: formData.xordernum } : {},
+      params: method === "GET" ? { xrecnum: formData.xrecnum } : {},
       onSuccess: (data) => {
         setActionMsg(successMsg);
-        if (data?.xordernum) setFormData((prev) => ({ ...prev, ...data }));
+        if (data?.xrecnum) setFormData((prev) => ({ ...prev, ...data }));
         fetchRecords();
       },
       onError: (error) => setActionMsg(`Error: ${error}`),
@@ -85,11 +73,11 @@ function DataManager() {
     setTimeout(() => setIsDisabled(false), 1000);
   };
 
-  function orderCancel(){
+  function collectionCancel(){
     handleApiRequest({
-      endpoint: "/salesorder/cancel",
+      endpoint: "/collection/cancel",
       method: "PATCH",
-      params: { xordernum: formData.xordernum },
+      params: { xrecnum: formData.xrecnum },
       onSuccess: (data) => {
         setFormData((prev) => ({ ...prev, xstatus: data.xstatus }));
         fetchRecords();
@@ -98,11 +86,11 @@ function DataManager() {
     })
   }
 
-  function orderComplete() {
+  function collectionComplete() {
     handleApiRequest({
-      endpoint: "/salesorder/complete",
+      endpoint: "/collection/complete",
       method: "PATCH",
-      params: { xordernum: formData.xordernum },
+      params: { xrecnum: formData.xrecnum },
       onSuccess: (data) => {
         setFormData((prev) => ({ ...prev, xstatus: data.xstatus }));
         fetchRecords();
@@ -115,23 +103,9 @@ function DataManager() {
   return (
     <div className="container">
     <h2>
-        <b>Sales Order</b>
+        <b>Collection</b>
     </h2>
     <p style={{ color: actionmsg.includes("Error") ? "red" : "green" }}><b>{actionmsg}</b></p>
-    
-    {formData.xstatus !== "" ? 
-      <div style={{ display: "flex" }}>
-        <NavLink 
-          to={`detail/${formData.xordernum}`}
-          state={{ formData }} // Pass formData as state
-          className="route" 
-          style={{ display: "inline-block", textDecoration: "underline", fontSize: "16px" }}
-        >
-          Order Details
-        </NavLink>
-      </div> 
-    : ""}
-    
 
     {formData.xstatus === "Pending" ? 
       
@@ -140,7 +114,7 @@ function DataManager() {
           className="btn-complete"
           type="button"
           disabled={isDisabled}
-          onClick={orderComplete}
+          onClick={collectionComplete}
         >
           Complete
         </button>
@@ -149,7 +123,7 @@ function DataManager() {
           className="btn-close1"
           type="button"
           disabled={isDisabled}
-          onClick={orderCancel}
+          onClick={collectionCancel}
         >
           Close
         </button>
@@ -162,33 +136,23 @@ function DataManager() {
     <div className="crud-form">
       {/* Action Buttons */}
         <Crudbuttons
-          handleShow={() => handleAction("/salesorder/show", "GET", "SalesOrder fetched successfully")}
+          handleShow={() => handleAction("/collection/show", "GET", "Collection fetched successfully")}
           handleClear={handleClear}
-          handleAdd={() => handleAction("/salesorder/add", "POST", "SalesOrder added successfully")}
-          handleUpdate={() => handleAction("/salesorder/update", "PUT", "SalesOrder updated successfully")}
-          handleDelete={() => handleAction("/salesorder/delete", "DELETE", "SalesOrder deleted successfully")}
+          handleAdd={() => handleAction("/collection/add", "POST", "Collection added successfully")}
+          handleUpdate={() => handleAction("/collection/update", "PUT", "Collection updated successfully")}
+          handleDelete={() => handleAction("/collection/delete", "DELETE", "Collection deleted successfully")}
           isDisabled={isDisabled}
         />
 
         {/* Form for Details */}
-        <div className="form-layout-2">
+        <div className="form-layout-3">
           <input
             type="text"
-            placeholder="SalesOrder Code"
+            placeholder="Collection Code"
             className="form-input"
-            value={formData.xordernum}
-            onChange={(e) => handleInputChange("xordernum", e.target.value)}
+            value={formData.xrecnum}
+            onChange={(e) => handleInputChange("xrecnum", e.target.value)}
           />
-          <input
-            type="text"
-            placeholder="Customer Code"
-            className="form-input"
-            value={formData.xcus}
-            onChange={(e) => handleInputChange("xcus", e.target.value)}
-          />
-        </div>
-
-        <div className="form-layout-2">
           <input
             type="text"
             placeholder="Date Created"
@@ -209,35 +173,62 @@ function DataManager() {
           />
         </div>
 
+        <div className="form-layout-3">
+        <input
+            type="text"
+            placeholder="Customer Code"
+            className="form-input"
+            value={formData.xcus}
+            onChange={(e) => handleInputChange("xcus", e.target.value)}
+          />
+          <input
+            type="text"
+            placeholder="Sales Order No."
+            className="form-input"
+            value={formData.xordernum}
+            onChange={(e) => handleInputChange("xordernum", e.target.value)}
+          />
+          <input
+            type="text"
+            placeholder="Total Amount"
+            className="form-input"
+            value={formData.xamount}
+            onChange={(e) => handleInputChange("xamount", e.target.value)}
+          />
+        </div>
+
     </div>
     <div>
     
     <div className="detail-list-header">
-      <h2><nobr>Sales Order List</nobr></h2>
+      <h2><nobr>Collection List</nobr></h2>
       <input type="text" placeholder="Search" onChange={(e) => setsearchval(e.target.value)}/>
     </div>
     
       <table className="detail-list">
         <tr>
-          <th>SalesOrder Number</th>
+          <th>Collection Number</th>
           <th>Customer Code</th>
           <th>Customer Name</th>
+          <th>Sales Order Number</th>
           <th>Date</th>
           <th>Status</th>
         </tr>
         {records.filter(
           (data) =>
-            (data.xordernum && data.xordernum.includes(searchval)) ||
+            (data.xrecnum && data.xrecnum.includes(searchval)) ||
             (data.xcus && data.xcus.includes(searchval)) ||
             (data.xorg && data.xorg.toLowerCase().includes(searchval.toLowerCase())) ||
+            (data.xordernum && data.xordernum.includes(searchval)) ||
             (data.xdate && data.xdate.includes(searchval)) ||
             (data.xstatus && data.xstatus.toLowerCase().includes(searchval.toLowerCase()))
         )
         .map((data) => (
-          <tr key={data.xordernum} onClick={() => setFormData(data)}>
-            <td>{data.xordernum}</td>
+          <tr key={data.xrecnum} onClick={() => setFormData(data)}>
+            <td>{data.xrecnum}</td>
             <td>{data.xcus}</td>
             <td>{data.xorg}</td>
+            <td>{data.xordernum}</td>
             <td>{data.xdate}</td>
             <td
               style={{

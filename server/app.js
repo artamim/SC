@@ -6,8 +6,9 @@ const userHandler = require("./controllers/user");
 const signoutHandler = require("./controllers/signout");
 const customerRoutes = require("./routes/customerRoute");
 const supplierRoutes = require("./routes/supplierRoute");
+const collectionRoutes = require("./routes/collectionRoute");
 const itemRoutes = require("./routes/itemRoute");
-const salesorderRoute = require("./routes/salesorderRoute");
+const salesorderRoutes = require("./routes/salesorderRoute");
 require("dotenv").config();
 
 const app = express();
@@ -25,7 +26,8 @@ app.use(cookieParser());
 app.use("/customer", customerRoutes);
 app.use("/supplier", supplierRoutes);
 app.use("/item", itemRoutes);
-app.use("/salesorder", salesorderRoute);
+app.use("/salesorder", salesorderRoutes);
+app.use("/collection", collectionRoutes);
 
 app.post("/login", loginHandler);
 app.get("/user", userHandler);

@@ -1,0 +1,9 @@
+CREATE TABLE opcusrec (
+    xrecnum VARCHAR(20) PRIMARY KEY,          -- Unique record number
+    xordernum VARCHAR(20),                    -- Sales order code
+    xcus VARCHAR(20) NOT NULL,                -- Customer ID (Foreign Key)
+    xdate DATE DEFAULT CURRENT_DATE,          -- Auto-generated order date
+    xstatus VARCHAR(20) NOT NULL,             -- Status of the order
+    xamount DECIMAL(10, 2),
+    CONSTRAINT fk_xcus FOREIGN KEY (xcus) REFERENCES cacus(xcus)                 -- Foreign key constraint for xcus
+);

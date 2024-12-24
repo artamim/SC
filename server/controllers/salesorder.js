@@ -121,7 +121,6 @@ exports.completeSalesOrder = async (req, res) => {
 
   try {
     const itmcount = await pool.query(`select xitem cnt from opodt where xordernum = $1`, [xordernum]);
-    console.log(itmcount.rows.length)
     if (itmcount.rows.length === 0){
       res.status(400).json({ error: "Add items first" });
       return

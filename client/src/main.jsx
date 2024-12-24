@@ -12,6 +12,7 @@ import SupplierManager from './pages/Supplier.jsx'
 import ItemManager from './pages/Item.jsx'
 import SalesOrderManager from './pages/SalesOrder.jsx'
 import SalesDetailManager from './pages/SalesDetail.jsx'
+import CollectionManager from './pages/Collection.jsx'
 import Signout from './pages/Signout.jsx'
 import Dashboard from './pages/Dashboard.jsx'
 import About from './pages/About.jsx'
@@ -35,6 +36,7 @@ const router = createBrowserRouter(
           <Route path="item" element={<ItemManager />} />
           <Route path="salesorder" element={<SalesOrderManager />} />
           <Route path="salesorder/detail/:xordernum" element={<SalesDetailManager />} />
+          <Route path="collection" element={<CollectionManager />} />
         </Route>
       </Route>
       <Route path="*" element={<PathNotFound />} />
