@@ -212,6 +212,7 @@ function DataManager() {
           <th>Customer Name</th>
           <th>Sales Order Number</th>
           <th>Date</th>
+          <th>Amount</th>
           <th>Status</th>
         </tr>
         {records.filter(
@@ -230,6 +231,7 @@ function DataManager() {
             <td>{data.xorg}</td>
             <td>{data.xordernum}</td>
             <td>{data.xdate}</td>
+            <td>{data.xamount}</td>
             <td
               style={{
                 color: data.xstatus === "Completed" ? "green" : data.xstatus === "Cancelled" ? "red" : "inherit",

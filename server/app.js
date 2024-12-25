@@ -9,6 +9,7 @@ const supplierRoutes = require("./routes/supplierRoute");
 const collectionRoutes = require("./routes/collectionRoute");
 const itemRoutes = require("./routes/itemRoute");
 const salesorderRoutes = require("./routes/salesorderRoute");
+const dashboardRoutes = require("./routes/dashboardRoute");
 require("dotenv").config();
 
 const app = express();
@@ -28,6 +29,7 @@ app.use("/supplier", supplierRoutes);
 app.use("/item", itemRoutes);
 app.use("/salesorder", salesorderRoutes);
 app.use("/collection", collectionRoutes);
+app.use("/dashboard", dashboardRoutes);
 
 app.post("/login", loginHandler);
 app.get("/user", userHandler);

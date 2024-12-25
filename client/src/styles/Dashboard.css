@@ -3,4 +3,15 @@
   text-align: center;
 }
 
+.dash-layout-12{
+  display: grid;
+  text-align: left;
+  grid-template-columns: 1fr 2fr;
+  margin-bottom: 60px;
+}
 
+.dash-layout-21{
+  display: grid;
+  text-align: left;
+  grid-template-columns: 2fr 1fr;
+}
