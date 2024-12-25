@@ -17,7 +17,8 @@ const port = 5000;
 
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://tamimerp.netlify.app"], // Add your Netlify URL here
+    //origin: ["http://localhost:5173", "https://tamimerp.netlify.app"], // Add your Netlify URL here
+    origin: "https://tamimerp.netlify.app",
     credentials: true,
   })
 );
