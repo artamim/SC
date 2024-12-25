@@ -17,26 +17,26 @@ const loginHandler = async (req, res) => {
 
   try {
     // Fetch the user from the database using the email
-    console.log("_____")
-    console.log(email)
-    console.log(password)
+    
     const result = await pool.query(
       "SELECT xuser, xpassword FROM users WHERE xemail = $1",
       [email]
     );
-
+    console.log(result.rows.length)
     // Check if the user exists
     if (result.rows.length === 0) {
       return res.status(400).json({ errors: { email: "Email is not registered" } });
     }
 
     const appuser = result.rows[0];
-
+    console.log("_____")
+    console.log(password)
+    console.log(appuser.xpassword)
     // Validate the password
     if (password !== appuser.xpassword) {
       return res.status(400).json({ errors: { password: "Incorrect password" } });
     }
-
+    console.log("This far")
     // Create a JWT token
     const token = createToken(appuser.xuser);
 
