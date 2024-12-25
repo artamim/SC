@@ -17,6 +17,9 @@ const loginHandler = async (req, res) => {
 
   try {
     // Fetch the user from the database using the email
+    console.log("_____")
+    console.log(email)
+    console.log(password)
     const result = await pool.query(
       "SELECT xuser, xpassword FROM users WHERE xemail = $1",
       [email]
