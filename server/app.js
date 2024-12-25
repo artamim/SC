@@ -17,11 +17,25 @@ const port = 5000;
 
 app.use(
   cors({
-    //origin: ["http://localhost:5173", "https://tamimerp.netlify.app"], // Add your Netlify URL here
-    origin: "https://tamimerp.netlify.app",
+    origin: (origin, callback) => {
+      const allowedOrigins = [
+        "http://localhost:5173",
+        "https://tamimerp.netlify.app",
+      ];
+      // Allow dynamic Netlify subdomains
+      if (
+        allowedOrigins.includes(origin) ||
+        (origin && origin.endsWith(".netlify.app"))
+      ) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   })
 );
+
 
 app.use(express.json());
 app.use(cookieParser());
