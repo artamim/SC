@@ -18,6 +18,7 @@ const port = 5000;
 app.use(
   cors({
     origin: (origin, callback) => {
+      console.log("Incoming request origin:", origin);
       const allowedOrigins = [
         "http://localhost:5173",
         "https://tamimerp.netlify.app",
@@ -35,6 +36,7 @@ app.use(
     credentials: true,
   })
 );
+
 
 
 app.use(express.json());
