@@ -1,8 +1,8 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:5000", // Backend URL
-  withCredentials: true, // Include cookies
+  baseURL: import.meta.env.VITE_PROD_BASE_URL || "http://localhost:5000",
+  withCredentials: true,
 });
 
 export default axiosInstance;
