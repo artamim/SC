@@ -13,11 +13,11 @@ const dashboardRoutes = require("./routes/dashboardRoute");
 require("dotenv").config();
 
 const app = express();
-const port = process.env.PORT || 5000;
+const port = 5000;
 
 app.use(
   cors({
-    origin: "https://tamimerp.netlify.app/",
+    origin: "http://localhost:5173",
     credentials: true,
   })
 );
