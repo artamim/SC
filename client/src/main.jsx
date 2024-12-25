@@ -24,7 +24,7 @@ import SideLayout from './layouts/SideLayout.jsx'
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-      <Route path="https://sc-wahk.onrender.com/" element={<Landing />} />
+      <Route path="/" element={<Landing />} />
       <Route path="login" element={<Login />} action={loginAction} />
       <Route path="signout"  element={<Signout />} />
       <Route element={<ProtectedRoutes />}>
